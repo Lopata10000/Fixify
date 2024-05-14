@@ -1,0 +1,20 @@
+#dateOfBirth {
+    border: none; /* прибирає рамку */
+}
+
+#error-message {
+    text-align: center;
+    color: white;
+    background-color: red;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+}
+.ebook-box {
+    max-height: 700px; /* Замініть значення на бажану максимальну висоту */
+    overflow: scroll; /* Додайте прокрутку, якщо контент перевищує максимальну висоту */
+}.nav-link.w-nav-link {
+     display: inline-block;
+ }
+
+
