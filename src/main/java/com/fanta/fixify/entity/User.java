@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -32,12 +31,21 @@ public class User implements UserDetails {
 
     @Column(name = "password_hash", nullable = false, length = 255)
     private String password;
+    @Column(name = "full_name", length = 255)
+    private String fullName;
+
+    @Column(name = "phone_number", length = 20)
+    private String phoneNumber;
+
+    @Column(name = "address", length = 255)
+    private String address;
 
     @Column(name = "role", nullable = false, length = 20)
     private String role;
 
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -46,7 +54,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override

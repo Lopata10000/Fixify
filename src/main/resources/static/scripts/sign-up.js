@@ -2,8 +2,12 @@ const form = document.getElementById('user-form');
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
+    const input = document.querySelector("#phoneNumber");
+    const phoneNumber = window.intlTelInputGlobals.getInstance(input).getNumber();
     const formData = new FormData(form);
-
+    const role= form.getAttribute("data-role")
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('role', role);
     $.ajax({
         type: "POST",
         url: "/api/users",
@@ -20,7 +24,7 @@ form.addEventListener('submit', (event) => {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "/html/resources.html";
+                    window.location.href = "/html/home.html";
                 }
             });
 

@@ -19,7 +19,7 @@ form.addEventListener('submit', async (event) => {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "/html/resources.html";
+                    window.location.href = "/html/home.html";
                 }
             });
 

@@ -1,6 +1,7 @@
 package com.fanta.fixify.service;
 
 import com.fanta.fixify.entity.User;
+import com.fanta.fixify.exception.CustomAuthenticationException;
 import com.fanta.fixify.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        if (!isEmailPresent(user.getEmail())) {
+            throw new CustomAuthenticationException("Електронна адреса уже використовується.");
+        }
         return userRepository.save(user);
     }
 
@@ -41,5 +45,8 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+    public boolean isEmailPresent(String email) {
+        return !userRepository.findByEmail(email).isPresent();
     }
 }

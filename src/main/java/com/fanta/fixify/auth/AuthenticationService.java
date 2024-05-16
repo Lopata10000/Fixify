@@ -33,13 +33,19 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    LocalDateTime currentDateTime = LocalDateTime.now();
+
+    Date registrationDate = Date.valueOf(currentDateTime.toLocalDate());
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .registrationDate(Date.valueOf(String.valueOf(LocalDateTime.now())))
-                .role(String.valueOf(Role.USER))
+                .address(request.getAddress())
+                .phoneNumber(request.getPhoneNumber())
+                .fullName(request.getFullName())
+                .registrationDate(registrationDate)
+                .role(String.valueOf(request.getRole()))
                 .build();
         var savedUser = userService.createUser(user);
         var jwtToken = jwtService.generateToken(user);
