@@ -17,7 +17,6 @@ form.addEventListener('submit', (event) => {
         success: function (response) {
             const token = response.refresh_token;
             localStorage.setItem('refreshToken', token);
-            localStorage.setItem('refreshToken', token);
             Swal.fire({
                 title: 'Успішна реєстрація.',
                 icon: 'success',

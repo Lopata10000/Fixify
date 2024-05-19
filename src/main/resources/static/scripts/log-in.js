@@ -1,3 +1,5 @@
+import axiosInstance from "./axios-instance";
+
 const form = document.getElementById('user-form');
 
 form.addEventListener('submit', async (event) => {
@@ -10,6 +12,7 @@ form.addEventListener('submit', async (event) => {
         contentType: "application/json",
         dataType: "json", // Add this to specify the response data type
 
+
         success: function (response) {
             const token = response.refresh_token;
             localStorage.setItem('refreshToken', token);
@@ -19,7 +22,14 @@ form.addEventListener('submit', async (event) => {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "/html/home.html";
+                    axiosInstance.get('/html/new-event.html')
+                        .then(response => {
+                            window.location.href = "/html/new-event.html";
+                        })
+                        .catch(error => {
+                            // Обробка помилки
+                        });
+
                 }
             });
 

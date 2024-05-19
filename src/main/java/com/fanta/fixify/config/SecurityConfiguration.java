@@ -14,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import static com.fanta.fixify.entity.Permission.ADMIN_UPDATE;
+import static com.fanta.fixify.entity.Permission.MANAGER_UPDATE;
+import static com.fanta.fixify.entity.Role.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -46,10 +49,9 @@ public class SecurityConfiguration {
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/authentication").permitAll()
-                                .requestMatchers(HttpMethod.POST, "api/applications/create").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/events/new").permitAll()
-                                .requestMatchers( "/api/events").permitAll()
-                                .requestMatchers( "/html/new-event.html").permitAll()
+                                .requestMatchers(HttpMethod.POST, "api/applications/create").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+                                .requestMatchers(HttpMethod.POST, "/api/events/new").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+                                .requestMatchers( "/html/new-event.html").hasAnyRole(ADMIN.name(), USER.name())
                                 .requestMatchers( "/api/applications").permitAll()
 
                                 .requestMatchers("/css/**").permitAll()

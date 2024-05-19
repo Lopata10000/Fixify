@@ -45,7 +45,7 @@ public class AuthenticationService {
                 .phoneNumber(request.getPhoneNumber())
                 .fullName(request.getFullName())
                 .registrationDate(registrationDate)
-                .role(String.valueOf(request.getRole()))
+                .role(Role.valueOf(String.valueOf((request.getRole()))))
                 .build();
         var savedUser = userService.createUser(user);
         var jwtToken = jwtService.generateToken(user);

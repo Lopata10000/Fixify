@@ -1,17 +1,17 @@
 package com.fanta.fixify.entity;
 
+import com.fanta.fixify.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Data
@@ -40,8 +40,12 @@ public class User implements UserDetails {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "role", nullable = false, length = 20)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
+
 
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
@@ -49,8 +53,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+        return role.getAuthorities();
     }
+
 
     @Override
     public String getPassword() {
