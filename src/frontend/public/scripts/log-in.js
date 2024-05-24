@@ -1,6 +1,4 @@
-import {AuthenticationService} from '../../services/services/authentication.service';
-import {AuthenticationRequest} from '../../services/models/authentication-request';
-import {TokenService} from '../../services/token/token.service';
+
 const form = document.getElementById('user-form');
 
 form.addEventListener('submit', async (event) => {

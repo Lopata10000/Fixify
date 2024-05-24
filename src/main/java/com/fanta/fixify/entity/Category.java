@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "subcategory")
-public class Subcategory {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "subcategory_id")
+    @Column(name = "category_id")
     private Long id;
 
-    @Column(name = "subcategory_name ", nullable = false, unique = true, length = 100)
-    private String subcategoryName;
+    @Column(name = "category_name", nullable = false, unique = true, length = 100)
+    private String categoryName;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
-    private SpecialistCategory category;
+    @JoinColumn(name = "parent_id")
+    private Category category;
 
 }

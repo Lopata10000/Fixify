@@ -92,45 +92,59 @@
             </div>
             </div>
 
-        <div class="section" style="margin-top:  20px">
-            <div id="app" class="container">
-                <div class="section-top"><h2 class="heading h3">Головні події</h2><a
-                        class="button light mobile-hidden w-button"
-                        href="/html/resources.html">Побачити
-                    всі події</a></div>
-                <div class="w-dyn-items">
-                    <div class="large-3-grid w-dyn-items" role="list">
+    <h1>CRUD Operations</h1>
+    <select id="tableSelector">
+        <option value="towns/all">Users</option>
+        <!-- Додайте інші таблиці тут -->
+    </select>
+    <button onclick="loadTable()">Load Table</button>
+    <div id="tableContainer"></div>
 
-                        <!-- Додайте ваші стилі та розмітку для кожної картки події тут -->
-                        <div v-for="event in events" :key="event.id" class="ebook-box w-dyn-item" role="listitem" width>
-                            <a :href="'/event/' + event.id" class="ebook-thumbnail w-inline-block">
-                                <img alt="Event Cover"
-                                     height="350" src="/image/img.png" width="350">
-                            </a>
+    <script>
+        function loadTable() {
+            var selectedTable = $('#tableSelector').val();
+            $.get(`/api/${selectedTable}`, function(data) {
+                var tableHtml = '<table border="1"><tr>';
+                // Вивести заголовки таблиці
+                for (var key in data[0]) {
+                    tableHtml += `<th>${key}</th>`;
+                }
+                tableHtml += '</tr>';
+                // Вивести дані таблиці
+                data.forEach(function(row) {
+                    tableHtml += '<tr>';
+                    for (var key in row) {
+                        tableHtml += `<td>${row[key]}</td>`;
+                    }
+                    tableHtml += `<td><button onclick="editRow(${row.id})">Edit</button></td>`;
+                    tableHtml += `<td><button onclick="deleteRow(${row.id})">Delete</button></td>`;
+                    tableHtml += '</tr>';
+                });
+                tableHtml += '</table>';
+                $('#tableContainer').html(tableHtml);
+            });
+        }
 
-                            <a :href="'/event/' + event.id" class="card-text-link w-inline-block">
-                                <h2 class="heading h3">{{ event.eventName }}</h2>
-                                <div class="paragraph small">Керівник: {{ event.organizerContactInfo }}</div>
-                                <p class="paragraph small"> Дата події: {{ event.eventDate }} {{ event.eventTime }}</p>
-                                <p class="paragraph small">{{ event.placeAddress }}</p>
-                                <p class="paragraph small"> Кількість учасників: {{ event.numberOfParticipants }}</p>
-                            </a>
-                            <footer class="card-footer">
-                                <a @click="register(event)" class="small-button w-button" :data-event-id="event.id">
-                                    Register
-                                </a>
-                            </footer>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        function editRow(id) {
+            // Реалізуйте логіку редагування запису
+        }
+
+        function deleteRow(id) {
+            var selectedTable = $('#tableSelector').val();
+            $.ajax({
+                url: `/api/${selectedTable}/${id}`,
+                type: 'DELETE',
+                success: function(result) {
+                    loadTable(); // Перезавантажити таблицю після видалення
+                }
+            });
+        }
+    </script>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    </div>
     <div class="footer">
         <div class="footer-container w-container">
             <div class="w-layout-grid footer-grid">

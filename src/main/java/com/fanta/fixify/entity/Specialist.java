@@ -23,7 +23,7 @@ public class Specialist {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private SpecialistCategory specialistCategory;
+    private Category Category;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;

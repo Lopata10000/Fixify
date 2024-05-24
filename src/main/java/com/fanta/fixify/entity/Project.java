@@ -30,7 +30,7 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private SpecialistCategory specialistCategory;
+    private Category Category;
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;
