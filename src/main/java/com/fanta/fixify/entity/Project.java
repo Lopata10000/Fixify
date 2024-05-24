@@ -20,11 +20,17 @@ public class Project {
     @Column(name = "project_id")
     private Long id;
 
-    @Column(name = "author_id", nullable = false)
-    private Long authorId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "specialist_id", nullable = false)
+    private Specialist specialist;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private SpecialistCategory specialistCategory;
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;

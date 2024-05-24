@@ -26,6 +26,10 @@ public class UserService {
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 
     public User createUser(User user) {
         if (!isEmailPresent(user.getEmail())) {

@@ -7,10 +7,12 @@
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link href="https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.cf64f3824.css"
           rel="stylesheet" type="text/css"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Підключаємо Axios з CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="/css/style.css" rel="stylesheet">
     <script type="text/javascript">!function (o, c) {
         var n = c.documentElement, t = " w-mod-";
@@ -22,23 +24,24 @@
 <div class="w-users-userformpagewrap full-page-wrapper">
     <div class="w-users-usersignupformwrapper admin-form-card">
         <div id="buttons-wrapper">
-            <img src="/image/logo-long.png" loading="lazy"  alt="" width="300"/>
+            <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
             <p align="center" class="paragraph large">Хто ти? </p>
             <button class="  button w-button " onclick="showRegistrationFields('ADMIN')">Замовник</button>
             <button class="button w-button " onclick="showRegistrationFields('MANAGER')">Фахівець</button>
         </div>
         <form id="user-form" style="display: none;">
-            <img src="/image/logo-long.png" loading="lazy"  alt="" width="300"/>
+            <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
             <div class="w-users-userformheader form-card-header"><h2 class="heading h3">Реєстрація</h2></div>
             <input id="fullName" class="text-field w-input" data-name="field" data-wf-user-field="wf-user-field-name"
                    maxlength="256"
                    name="fullName" pattern="[A-Za-zА-Яа-яЁёЇїІіЄєҐґ\s']{3,}" placeholder="Ваше повне ім'я" required
                    title="Будь ласка, введіть тільки літери і більше за 2 символи." type="text">
-            <input id="address" autoComplete="address" class="text-field w-input" data-wf-user-form-input-type="text"
-                   maxlength="256" name="address" placeholder="Вашe місто"
-                   required type="text"/>
+            <select id="address" name="address" required =""  data-name="Category 2" class="form-dropdown w-select">
+                <option value="" selected disabled>Оберіть ваше місто</option>
 
-            <input id="phoneNumber" class="text-field w-input" data-wf-user-form-input-type="telephone"
+            </select>
+
+            <input id="phoneNumber" class="text-field w-input, text-field" data-wf-user-form-input-type="telephone"
                    style="width: 300px;"
                    maxlength="10" name="phoneNumber" data-orig-size="10" required placeholder="Ваш номер телефону"
                    type="tel"/>
@@ -75,8 +78,8 @@
         </script>
         <script src="/scripts/phone-input.js"></script>
         <script src="/scripts/choose-role.js"></script>
-        <script src="/scripts/city.js">
-        </script>
+        <script src="/scripts/city.js"></script>
+        <script src="/scripts/towns.js"></script>
 
 
         <div class="w-users-usersignupverificationmessage verification-box w-form-verification"

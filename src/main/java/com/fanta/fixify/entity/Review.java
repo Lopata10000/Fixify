@@ -19,11 +19,17 @@ public class Review {
     @Column(name = "review_id")
     private Long id;
 
-    @Column(name = "author_id", nullable = false)
-    private Long authorId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "recipient_id", nullable = false)
-    private Long recipientId;
+    @ManyToOne
+    @JoinColumn(name = "specialist_id", nullable = false)
+    private Specialist specialist;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @Column(name = "rating", nullable = false)
     private int rating;

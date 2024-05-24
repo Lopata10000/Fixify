@@ -17,11 +17,13 @@ public class Specialist {
     @Column(name = "specialist_id")
     private Long id;
 
-    @Column(name = "user_id", unique = true)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
 
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private SpecialistCategory specialistCategory;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;

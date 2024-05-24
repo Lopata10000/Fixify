@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "specialist_categories")
+@Table(name = "categories")
 public class SpecialistCategory {
 
     @Id
@@ -19,5 +19,9 @@ public class SpecialistCategory {
 
     @Column(name = "category_name", nullable = false, unique = true, length = 100)
     private String categoryName;
+
+    @ManyToOne
+    @JoinColumn(name = "category_name", nullable = false, unique = true, length = 100)
+    private Ca categoryName;
 
 }

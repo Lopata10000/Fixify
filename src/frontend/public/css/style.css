@@ -1,0 +1,52 @@
+#error-message {
+    text-align: center;
+    color: white;
+    background-color: red;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+}
+#logo {
+    border-radius: 10px;
+    width: 75px;
+}
+
+
+
+.role-button {
+    width: 150px;
+    height: 100px;
+}
+.ebook-box {
+    max-height: 700px; /* Замініть значення на бажану максимальну висоту */
+    overflow: scroll; /* Додайте прокрутку, якщо контент перевищує максимальну висоту */
+}
+
+.nav-link.w-nav-link {
+    display: inline-block;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#buttons-wrapper button {
+    animation: slideIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+/* Стилі для зникнення */
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+
+
