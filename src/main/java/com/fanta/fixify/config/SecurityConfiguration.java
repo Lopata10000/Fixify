@@ -56,18 +56,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/user/all").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/towns/all").permitAll()
+                                .requestMatchers( "/api/**").permitAll()
+                                .requestMatchers( "/api/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/authentication").permitAll()
                                 .requestMatchers(HttpMethod.POST, "api/applications/create").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                                .requestMatchers(HttpMethod.POST, "/api/events/new").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                                .requestMatchers(HttpMethod.GET, "/api/towns/all").permitAll()
                                 .requestMatchers( "/private/new-event.html").hasAnyRole(ADMIN.name(), USER.name())
                                 .requestMatchers( "/api/applications").permitAll()
-
-                                .requestMatchers(HttpMethod.GET, "/new-event").permitAll()
-
                 )
 
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

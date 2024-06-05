@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Column(name = "full_name", length = 255)
     private String fullName;
 
-    @Column(name = "phone_number", length = 20)
+    @Column(name = "phone_number", length = 40)
     private String phoneNumber;
 
     @Column(name = "address", length = 255)

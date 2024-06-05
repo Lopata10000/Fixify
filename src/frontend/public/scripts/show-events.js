@@ -1,50 +1,20 @@
-
 const app = new Vue({
     el: '#app',
     data() {
         return {
-            events: []
+            reviews: []
         }
     },
     methods: {
         async fetchEvents() {
             const headers = {};
-            const response = await axios.get('/api/events');
-            this.events = response.data;
+            const response = await axios.get('/api/reviews/all');
+            this.reviews = response.data;
 
         },
-        async register(event) {
-            var token = localStorage.getItem('refreshToken');
+        register(review) {
+            window.location.href = "/html/access-denied.html";
 
-
-            try {
-                const eventId = event.id;
-
-                const applicationData = {
-                    eventId: eventId,
-                    userId: 1,
-                    applicantName: "Ім'я користувача",
-                    note: "Примітка про заявку"
-                };
-
-                const headers = {
-                    'Authorization': `Bearer ${token}`
-                };
-
-                await axios.post('/api/applications/create', applicationData, {
-                    headers: headers
-                });
-                Swal.fire({
-                    title: 'Ваша заявка надіслана.',
-                    text: 'Ваша заявка падіслана на розгляд',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-
-            } catch (error) {
-                window.location.href = "/html/access-denied.html";
-
-            }
         }
     },
     mounted() {

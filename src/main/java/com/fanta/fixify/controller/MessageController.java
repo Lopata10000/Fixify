@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("api/messages")
 public class MessageController {
 
     private final MessageService messageService;
@@ -18,7 +18,7 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Message> getAllMessages() {
         return messageService.getAllMessages();
     }

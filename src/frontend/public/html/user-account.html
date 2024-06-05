@@ -1,12 +1,12 @@
-<!DOCTYPE html><!-- This site was created in Webflow. https://www.webflow.com --><!-- Last Published: Fri May 31 2024 08:03:10 GMT+0000 (Coordinated Universal Time) -->
-<html data-wf-domain="priborzhavsky-lyceum-news.webflow.io" data-wf-page="6610606a30da13b8a528a127"
+<!DOCTYPE html><!-- This site was created in Webflow. https://www.webflow.com --><!-- Last Published: Fri May 31 2024 05:38:41 GMT+0000 (Coordinated Universal Time) -->
+<html data-wf-domain="priborzhavsky-lyceum-news.webflow.io" data-wf-page="6610606a30da13b8a528a148"
       data-wf-site="6610606930da13b8a528a088" lang="en">
 <head>
     <meta charset="utf-8"/>
     <title>Priborzhavsky-Lyceum-News</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="Webflow" name="generator"/>
-    <link href="https://cdn.prod.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.13fe47379.css"
+    <link href="https://cdn.prod.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.f17eb0cac.css"
           rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
@@ -49,7 +49,7 @@
                             type="submit" class="hidden w-button" value="Search"/></form>
                 </div>
             </div>
-            <div class="nav-cta-button-container"><a href="/html/home.html" class="nav-link cta-button w-nav-link">Головне
+            <div class="nav-cta-button-container"><a href="/sign-up" class="nav-link cta-button w-nav-link">Головне
                 вікно</a></div>
         </nav>
         <div class="menu-button w-nav-button"><img
@@ -57,16 +57,51 @@
                 loading="lazy" width="24" alt="" class="menu-icon"/></div>
     </div>
 </div>
-<div class="w-users-userformpagewrap utility-page-wrap center-align">
-    <div class="w-users-userformheader"><img
-            src="https://cdn.prod.website-files.com/6610606930da13b8a528a088/6610606a30da13b8a528a16f_Lock%20and%20Key%20Icon.svg"
-            alt="" class="icon large"/>
-        <h2 class="heading h2">Відмовлено у доступі</h2></div>
-    <p class="paragraph medium">Щоб виконати цю дію потрібно мати обліковий запис</p>
-    <div class="spacer _16"></div>
-    <a href="/html/sign-up.html" class="button white w-button">Зареєструватися</a>
-    <div class="spacer _16"></div>
-    <a href="/html/log-in.html" class="paragraph small">Уже маєте аккаунт? Увійти</a></div>
+<div class="w-users-useraccountwrapper account-page-wrapper" data-wf-user-account="true"
+     data-wf-collection="site.siteUser">
+    <div class="w-users-blockcontent account-card">
+        <div class="w-users-blockheader account-header"><h2 class="heading h3">Деталі акаунту</h2></div>
+        <div>
+            <form class="account-info-wrapper" method="post" data-wf-user-form-type="userAccount"><label for=""
+                                                                                                         class="field-label">Пошта</label><input
+                    placeholder="" id="wf-user-account-email" disabled="" name="Email"
+                    class="text-field w-input w-input-disabled" type="email" autoComplete="username" required=""
+                    data-wf-user-form-input-type="email"/><label for="wf-user-account-name"
+                                                                 class="field-label">Імя</label><input
+                    class="text-field w-input" maxlength="256" name="" data-name="field"
+                    data-wf-user-field="wf-user-field-name" placeholder="" fieldType="" type="text"
+                    id="wf-user-account-name" required=""/><label for="wf-user-account-name-2"
+                                                                  class="field-label">Імя</label>
+                <div class="spacer _16"></div>
+                <h3 class="field-label">Налаштування паролю</h3><a href="/reset-password">Скидання паролю</a>
+                <div class="spacer _24"></div>
+                <h3 class="field-label no-margin">Інші налаштування</h3><label
+                        id="w-node-_62b23e3845c1a6d0f6be4e4900000000001b-a528a148"
+                        class="w-checkbox checkbox-field"><input class="w-checkbox-input check-box" name="Checkbox"
+                                                                 data-name="Checkbox"
+                                                                 data-wf-user-field="wf-user-field-accept-communications"
+                                                                 placeholder="" type="checkbox"
+                                                                 id="wf-user-account-accept-communications" required=""
+                                                                 checked=""/><span class="checkbox-label w-form-label"
+                                                                                   for="Checkbox">Я даю згоду на отримання маркетингових листів.</span></label><input
+                        data-wait="Зберігання..." type="submit"
+                        class="w-users-useraccountformsavebutton small-button w-button" value="Зберегти зміни"/><input
+                        type="reset" id="w-node-_62b23e3845c1a6d0f6be4e49000000000020-a528a148"
+                        class="w-users-useraccountformcancelbutton small-button light w-button" value="Відмінити"/>
+            </form>
+            <div tabindex="-1" id="w-node-_62b23e3845c1a6d0f6be4e49000000000021-a528a148"
+                 class="w-users-userformsuccessstate w-form-success"><p>Your account was updated successfully.</p></div>
+            <div id="w-node-_62b23e3845c1a6d0f6be4e49000000000024-a528a148" style="display:none"
+                 data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+                <div class="user-form-error-msg"
+                     wf-account-update-form-general-error-error="There was an error updating your account. Please try again, or contact us if you continue to have problems.">
+                    There was an error updating your account. Please try again, or contact us if you continue to have
+                    problems.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="footer">
     <div class="footer-container w-container">
         <div class="w-layout-grid footer-grid">
@@ -87,7 +122,8 @@
                     href="/admin-panel" class="footer-link">Privacy Policy</a></div>
             <div class="footer-links-container"><h5 class="footer-header">fixify</h5><a href="/log-in"
                                                                                         class="footer-link">Sign
-                In</a><a href="/sign-up" class="footer-link">Sign Up</a><a href="/user-account" class="footer-link">User
+                In</a><a href="/sign-up" class="footer-link">Sign Up</a><a href="/user-account" aria-current="page"
+                                                                           class="footer-link w--current">User
                 Account</a><a href="/reset-password" class="footer-link">Reset Password </a></div>
         </div>
     </div>
