@@ -35,7 +35,7 @@ public class CategoryService {
         Optional<Category> existingCategory = CategoryRepository.findById(id);
         if (existingCategory.isPresent()) {
             updatedCategory.setId(id);
-            updatedCategory.setCategory(updatedCategory);
+            updatedCategory.setParent_id(updatedCategory);
             return CategoryRepository.save(updatedCategory);
         }
         return null; // or throw exception

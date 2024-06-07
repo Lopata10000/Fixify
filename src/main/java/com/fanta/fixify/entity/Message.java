@@ -22,10 +22,10 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user_id;
 
     @Column(name = "recipient_id", nullable = false)
-    private Long recipientId;
+    private Long recipient_id;
 
     @Column(name = "message_body", columnDefinition = "TEXT")
     private String messageBody;

@@ -2,11 +2,10 @@ package com.fanta.fixify;
 
 import com.github.javafaker.Faker;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,8 +29,7 @@ public class DatabaseManager {
                 pstmt.setString(3, faker.name().fullName());
                 pstmt.setString(4, faker.phoneNumber().phoneNumber());
                 pstmt.setString(5, faker.address().fullAddress());
-                pstmt.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
-                pstmt.setString(7, faker.options().option("ADMIN", "USER", "MANAGER"));
+                pstmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)));                pstmt.setString(7, faker.options().option("ADMIN", "USER", "MANAGER"));
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
@@ -75,7 +73,7 @@ public class DatabaseManager {
                 }
                 taskNames.add(taskName);
                 pstmt.setString(1, taskName);
-                pstmt.setInt(2, faker.number().numberBetween(1, 10)); // Assuming category_id is between 1 and 10
+                pstmt.setInt(2, faker.number().numberBetween(1, 200)); // Assuming category_id is between 1 and 10
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
@@ -90,13 +88,13 @@ public class DatabaseManager {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             for (int i = 0; i < count; i++) {
-                int userId = faker.number().numberBetween(1, 200); // Assuming user_id is between 1 and 50
+                int userId = faker.number().numberBetween(1, 300); // Assuming user_id is between 1 and 50
                 while (userIds.contains(userId)) {
-                    userId = faker.number().numberBetween(1, 200);
+                    userId = faker.number().numberBetween(1, 300);
                 }
                 userIds.add(userId);
                 pstmt.setInt(1, userId);
-                pstmt.setInt(2, faker.number().numberBetween(1, 10)); // Assuming category_id is between 1 and 10
+                pstmt.setInt(2, faker.number().numberBetween(1, 200)); // Assuming category_id is between 1 and 10
                 pstmt.setString(3, faker.lorem().sentence());
                 pstmt.setDouble(4, faker.number().randomDouble(2, 0, 5));
                 pstmt.setString(5, faker.lorem().sentence());
@@ -126,9 +124,9 @@ public class DatabaseManager {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             for (int i = 0; i < count; i++) {
-                pstmt.setInt(1, faker.number().numberBetween(1, 50)); // Assuming user_id is between 1 and 50
-                pstmt.setInt(2, faker.number().numberBetween(1, 50)); // Assuming specialist_id is between 1 and 50
-                pstmt.setInt(3, faker.number().numberBetween(1, 10)); // Assuming category_id is between 1 and 10
+                pstmt.setInt(1, faker.number().numberBetween(1, 200)); // Assuming user_id is between 1 and 50
+                pstmt.setInt(2, faker.number().numberBetween(1, 200)); // Assuming specialist_id is between 1 and 50
+                pstmt.setInt(3, faker.number().numberBetween(1, 200)); // Assuming category_id is between 1 and 10
                 pstmt.setString(4, faker.lorem().sentence());
                 pstmt.setString(5, faker.lorem().paragraph());
                 pstmt.setBigDecimal(6, BigDecimal.valueOf(faker.number().randomDouble(2, 50, 5000)));
@@ -146,12 +144,12 @@ public class DatabaseManager {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             for (int i = 0; i < count; i++) {
-                pstmt.setInt(1, faker.number().numberBetween(1, 50)); // Assuming user_id is between 1 and 50
-                pstmt.setInt(2, faker.number().numberBetween(1, 50)); // Assuming specialist_id is between 1 and 50
-                pstmt.setInt(3, faker.number().numberBetween(1, 50)); // Assuming project_id is between 1 and 50
+                pstmt.setInt(1, faker.number().numberBetween(1, 200)); // Assuming user_id is between 1 and 50
+                pstmt.setInt(2, faker.number().numberBetween(1, 200)); // Assuming specialist_id is between 1 and 50
+                pstmt.setInt(3, faker.number().numberBetween(1, 200)); // Assuming project_id is between 1 and 50
                 pstmt.setInt(4, faker.number().numberBetween(1, 5));
-                pstmt.setString(5, faker.lorem().paragraph());
-                pstmt.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
+                pstmt.setString(5, faker.lorem().paragraph(2));
+                pstmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)));
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
@@ -165,8 +163,8 @@ public class DatabaseManager {
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             for (int i = 0; i < count; i++) {
-                pstmt.setInt(1, faker.number().numberBetween(1, 50)); // Assuming user_id is between 1 and 50
-                pstmt.setInt(2, faker.number().numberBetween(1, 50)); // Assuming recipient_id is between 1 and 50
+                pstmt.setInt(1, faker.number().numberBetween(1, 200)); // Assuming user_id is between 1 and 50
+                pstmt.setInt(2, faker.number().numberBetween(1, 200)); // Assuming recipient_id is between 1 and 50
                 pstmt.setString(3, faker.lorem().paragraph());
                 pstmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
                 pstmt.addBatch();
@@ -176,26 +174,12 @@ public class DatabaseManager {
             System.out.println(e.getMessage());
         }
     }
-    public void addSessions(int count) {
-        String query = "INSERT INTO sessions (user_id, token, expiry_date) VALUES (?, ?, ?)";
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            for (int i = 0; i < count; i++) {
-                pstmt.setInt(1, faker.number().numberBetween(1, 50)); // Assuming user_id is between 1 and 50
-                pstmt.setString(2, faker.internet().uuid());
-                pstmt.setTimestamp(3, new java.sql.Timestamp(System.currentTimeMillis() + 86400000L)); // 24 hours from now
-                pstmt.addBatch();
-            }
-            pstmt.executeBatch();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+
 
     public static void main(String[] args) {
         DatabaseManager dbManager = new DatabaseManager();
-        int recordCount = 50; // Change this number to the desired number of records to insert per table
-        dbManager.addUsers(recordCount);
+        int recordCount = 200; // Change this number to the desired number of records to insert per table
+        dbManager.addUsers(recordCount+100);
         dbManager.addCategories(recordCount);
         dbManager.addSpecialists(recordCount);
         dbManager.addTasks(recordCount);
@@ -203,6 +187,6 @@ public class DatabaseManager {
         dbManager.addProjects(recordCount);
         dbManager.addReviews(recordCount);
         dbManager.addMessages(recordCount);
-        dbManager.addSessions(recordCount);
+
     }
 }

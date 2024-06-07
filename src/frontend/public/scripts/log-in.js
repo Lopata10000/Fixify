@@ -43,7 +43,13 @@ form.addEventListener('submit', async (event) => {
 
         },
         error: function (xhr, textStatus, errorThrown) {
-            showError(xhr.responseText);
+            showError(xhr.responseText); // Викликаємо функцію showError з повідомленням про помилку
+
+            Swal.fire({
+                title: 'Невірний логін або пароль',
+                icon: 'error',
+                confirmButtonText: 'OK'})
+
         }
     });
 });

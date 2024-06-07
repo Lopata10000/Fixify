@@ -10,8 +10,7 @@ BEGIN
             full_name VARCHAR(255),
             phone_number VARCHAR NOT NULL ,
             address VARCHAR(255),
-            registration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            role VARCHAR(40) NOT NULL
+            registration_date TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,            role VARCHAR(40) NOT NULL
         );
     END IF;
 END

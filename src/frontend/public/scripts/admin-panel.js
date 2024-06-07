@@ -1,8 +1,7 @@
-
 var currentTable = '';
 var currentRecordId = null;
 
-// Ваша функція loadTable()
+// Функція loadTable()
 function loadTable() {
     currentTable = $('#tableSelector').val();
     $.get(`/api/${currentTable}/all`, function (data) {
@@ -54,7 +53,6 @@ function loadTable() {
     });
 }
 
-
 function editRow(id) {
     currentRecordId = id; // Встановлення значення currentRecordId
     $.get(`/api/${currentTable}/${id}`, function (record) {
@@ -64,17 +62,27 @@ function editRow(id) {
             formHtml += `<input type="text" id="${key}" name="${key}" value="${record[key]}"><br>`;
         }
         formHtml += '<button class="button small" onclick="updateRecord()">Save</button>';
-        formHtml += '<button class="button small" onclick="cancelEdit()">Cancel</button>';
         $('#editForm').html(formHtml);
         $('#editFormContainer').show();
     });
 }
 
-function updateRecord() {
+function showFieldsOfRow(){
     var formData = {};
     $('#editForm').find('input').each(function () {
-        formData[$(this).attr('id')] = $(this).val();
+        var inputName = $(this).attr('name');
+        var inputValue = $(this).val();
+        if (inputName.endsWith('_id')) { // Перевірка, чи закінчується назва стовпця на "_id"
+            formData[inputName] = { id: inputValue }; // Створення об'єкта для зовнішнього ключа
+        } else {
+            formData[inputName] = inputValue;
+        }
     });
+
+}
+
+function updateRecord() {
+    showFieldsOfRow();
 
     fetch(`/api/${currentTable}/${currentRecordId}`, {
         method: 'PUT',
@@ -84,21 +92,16 @@ function updateRecord() {
         body: JSON.stringify(formData)
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            if (response.ok) {
+                console.log('Запис успішно оновлено');
+            } else {
+                console.error('Помилка при оновленні запису');
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            loadTable(); // Перезавантажити таблицю після оновлення
-            $('#editFormContainer').hide();
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.error('Помилка при виконанні запиту:', error);
         });
 }
-
 
 function deleteRow(id) {
     $.ajax({
@@ -115,9 +118,6 @@ function choseTable() {
     showCreateForm();
 }
 
-function cancelEdit() {
-    $('#editFormContainer').hide();
-}
 
 function showCreateForm() {
     $.get(`/api/${currentTable}/all`, function (data) {
@@ -125,25 +125,23 @@ function showCreateForm() {
             var record = data[0];
             var formHtml = '<form id="createForm">';
             for (var key in record) {
-                if (key !== 'id') { // Припустимо, що 'id' є автогенерованим
+                if (key!== 'id') { // При                if (key!== 'id') { // Припустимо, що 'id' є автогенерованим
                     formHtml += `<label for="${key}">${key}</label>`;
                     formHtml += `<input type="text" id="${key}" name="${key}" class="text-field w-input" ><br>`;
                 }
             }
             formHtml += '</form>';
-            formHtml += '<button class="button small" style="margin: 15px" onclick="createRecord()">Зберегти</button>';
-            formHtml += '<button class="button small" onclick="cancelCreate()">Відміна</button>';
+            formHtml += '<button class="button small" style="margin: 15px" onclick="createRecord()">Save</button>';
             $('#createFormContainer').html(formHtml);
             $('#createFormContainer').show();
         }
     });
 }
 
+
+
 function createRecord() {
-    var formData = {};
-    $('#createForm').find('input').each(function () {
-        formData[$(this).attr('id')] = $(this).val();
-    });
+    showFieldsOfRow();
 
     fetch(`/api/${currentTable}`, {
         method: 'POST',
@@ -152,18 +150,14 @@ function createRecord() {
         },
         body: JSON.stringify(formData)
     })
-
-        .then(data => {
-            console.log('Success:', data);
-            loadTable(); // Перезавантажити таблицю після створення нового запису
-            $('#createFormContainer').hide();
+        .then(response => {
+            if (response.ok) {
+                console.log('Запис успішно створено');
+            } else {
+                console.error('Помилка при створенні запису');
+            }
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.error('Помилка при виконанні запиту:', error);
         });
-}
-
-
-function cancelCreate() {
-    $('#createFormContainer').hide();
 }

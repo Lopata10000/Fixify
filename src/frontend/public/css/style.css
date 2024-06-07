@@ -52,6 +52,12 @@
     overflow-x: auto;
     margin: 0 auto;
 }
-
+.nav-container {
+    display: flex;
+    justify-content: flex-start; /* Вирівнює елементи вліво */
+    align-items: center; /* Вирівнює елементи по вертикалі центру */
+    padding: 10px;
+    background-color: #ffff;
+}
 
 

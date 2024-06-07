@@ -22,15 +22,15 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user_id;
 
     @ManyToOne
     @JoinColumn(name = "specialist_id", nullable = false)
-    private Specialist specialist;
+    private Specialist specialist_id;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category Category;
+    private Category category_id;
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;

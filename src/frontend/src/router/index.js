@@ -1,18 +1,32 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import NewEvent from '../components/NewEvent.vue'; // Adjust the path as necessary
+import HomePage from '../views/HomePage.vue';
+import SignUp from '../views/SingUp.vue';
+import LogIn from '../views/LogIn.vue';
+import AccessDenied from '../views/AccessDenied.vue';
 
 const routes = [
     {
-        path: '/new-event',
-        name: 'NewEvent',
-        component: NewEvent
-    }
+        path: '/home',
+        name: 'HomePage',
+        component: HomePage
+    }, {
+        path: '/sign-up',
+        name: 'SignUp',
+        component: SignUp
+    }, {
+        path: '/log-in',
+        name: 'LogIn',
+        component: LogIn
+    }, {
+        path: '/access-denied',
+        name: 'AccessDenied',
+        component: AccessDenied
+    },
 ];
 
-const router = createRouter({
+const index = createRouter({
     history: createWebHistory(),
     routes
 });
 
-export default router;
+export default index;

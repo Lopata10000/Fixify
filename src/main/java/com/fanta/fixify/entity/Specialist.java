@@ -19,11 +19,11 @@ public class Specialist {
 
     @ManyToOne
     @JoinColumn(name = "user_id", unique = true)
-    private User user;
+    private User user_id;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category Category;
+    private Category category_id;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
