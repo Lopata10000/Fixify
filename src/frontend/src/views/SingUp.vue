@@ -1,21 +1,23 @@
 <template>
   <div class="w-users-userformpagewrap full-page-wrapper">
     <div class="w-users-usersignupformwrapper admin-form-card">
-      <div v-if="!isFormVisible" id="buttons-wrapper">
+      <div v-if="!isFormVisible"  id="buttons-wrapper">
         <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
-        <p align="center" class="paragraph large">Хто ти? </p>
+        <p align="center"  class="paragraph large">Хто ти? </p>
+        <div class="center">
         <button class="button w-button" @click="showRegistrationFields('ADMIN')">Замовник</button>
         <button class="button w-button" @click="showRegistrationFields('MANAGER')">Фахівець</button>
+      </div>
       </div>
       <form ref="form" id="user-form" v-if="isFormVisible" @submit.prevent="submitForm">
         <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
         <div class="w-users-userformheader form-card-header">
-          <h2 class="heading h3">{{ formHeader }}</h2>
+          <h2 class="heading h3">Реєстрація</h2>
         </div>
         <input id="fullName" class="text-field w-input" v-model="fullName" maxlength="256" name="fullName" pattern="[A-Za-zА-Яа-яЁёЇїІіЄєҐґ\s']{3,}" placeholder="Ваше повне ім'я" required title="Будь ласка, введіть тільки літери і більше за 2 символи." type="text">
         <select id="address" v-model="address" name="address" required data-name="Category 2" class="form-dropdown w-select">
           <option value="" selected disabled>Оберіть ваше місто</option>
-          <option v-for="town in towns" :key="town.town_id" :value="town.town_id">{{ town.town_name }}</option>
+          <option v-for="town in towns" :key="town.id" :value="town.town_name">{{ town.town_name }}</option>
         </select>
 
         <input id="phoneNumber" class="text-field w-input" v-model="phoneNumber" style="width: 300px;" maxlength="10" name="phoneNumber" data-orig-size="10" required placeholder="Ваш номер телефону" type="tel"/>
@@ -26,7 +28,7 @@
           <span class="checkbox-label w-form-label">Я згоден з політикою конфіденційності</span>
         </label>
         <input class="w-users-userformbutton button w-button" type="submit" value="Реєстрація"/>
-        <div class="w-users-userformfooter form-card-footer"><span>Уже маєте аккаунт</span><a href="/html/log-in.html">Увійти</a></div>
+        <div class="w-users-userformfooter form-card-footer"><span>Уже маєте аккаунт</span><router-link to="/log-in">Увійти</router-link></div>
       </form>
 
       <div class="w-users-usersignupverificationmessage verification-box w-form-verification" data-wf-user-form-verification="true" tabindex="-1">
@@ -38,7 +40,7 @@
   </div>
 </template>
 
-<script>import axios from 'axios';
+<script>
 import Swal from 'sweetalert2';
 import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/css/intlTelInput.css';
@@ -64,8 +66,14 @@ export default {
   methods: {
     async fetchTowns() {
       try {
-        const response = await axios.get('/api/towns/all');
-        this.towns = response.data;
+        const response = await fetch('/api/towns/all');
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const townsData = await response.json();
+        this.towns = townsData;
       } catch (error) {
         console.error('Error fetching towns:', error);
       }
@@ -76,6 +84,7 @@ export default {
         separateDialCode: true,
         autoPlaceholder: "polite",
         formatOnDisplay: true,
+        nationalMode: false,
         utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
       });
 
@@ -102,11 +111,6 @@ export default {
       }
     },
     async submitForm() {
-
-      /*   const input = document.querySelector("#phoneNumber");
-         const iti = intlTelInput(input);
-         const formattedPhoneNumber = iti.getNumber();
-   */
       const formData = new FormData();
       formData.append('fullName', this.fullName);
       formData.append('address', this.address);
@@ -116,10 +120,20 @@ export default {
       formData.append('role', this.role);
 
       try {
-        const response = await axios.post('/api/users', formData, {
-          headers: { 'Content-Type': 'application/json' }
+        const response = await fetch('/api/users', {
+          method: 'POST',
+          body: JSON.stringify(Object.fromEntries(formData)),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
-        const token = response.data.refresh_token;
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        const token = responseData.refresh_token;
         localStorage.setItem('refreshToken', token);
         Swal.fire({
           title: 'Успішна реєстрація.',
@@ -131,17 +145,11 @@ export default {
           }
         });
       } catch (error) {
-        this.showError(error.response.data);
+        this.showError(error.message);
       }
-    },
-    showError(error) {
-      this.errorMessage = error.message;
-      setTimeout(() => {
-        this.errorMessage = '';
-      }, 5000);
     }
-  }
-};
+    }
+  };
 </script>
 
 <style>
@@ -170,6 +178,9 @@ export default {
 #buttons-wrapper button {
   animation: slideIn 0.5s ease-out forwards;
   opacity: 0;
+}
+.w-button{
+  margin: 5px;
 }
 
 /* Стилі для зникнення */

@@ -35,7 +35,7 @@
         />
         <div class="w-users-userformfooter form-card-footer">
           <span>Немає акаунту?</span>
-          <a href="/html/sign-up.html">Зареєструватись</a>
+          <router-link to="/sign-up">Зареєструватися</router-link>
         </div>
       </form>
       <div id="error-message" style="display: none"></div>

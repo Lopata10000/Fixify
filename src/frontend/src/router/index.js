@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue';
 import SignUp from '../views/SingUp.vue';
 import LogIn from '../views/LogIn.vue';
 import AccessDenied from '../views/AccessDenied.vue';
+import AdminPanel from '../views/AdminPanel.vue';
 
 const routes = [
     {
@@ -21,7 +22,11 @@ const routes = [
         path: '/access-denied',
         name: 'AccessDenied',
         component: AccessDenied
-    },
+    }, {
+        path: '/admin-panel',
+        name: 'AdminPanel',
+        component: AdminPanel
+    }
 ];
 
 const index = createRouter({

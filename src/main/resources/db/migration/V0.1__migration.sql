@@ -25,7 +25,8 @@ BEGIN
             category_name VARCHAR(100) NOT NULL UNIQUE,
             parent_id INT,
             CONSTRAINT fk_parent FOREIGN KEY (parent_id) REFERENCES categories(category_id) ON DELETE SET NULL
-        );
+
+                                );
     END IF;
 END
 $$;

@@ -61,7 +61,7 @@ function editRow(id) {
             formHtml += `<label for="${key}">${key}</label>`;
             formHtml += `<input type="text" id="${key}" name="${key}" value="${record[key]}"><br>`;
         }
-        formHtml += '<button class="button small" onclick="updateRecord()">Save</button>';
+        formHtml += '<button class="button small" onclick="updateRecord()">Upt</button>';
         $('#editForm').html(formHtml);
         $('#editFormContainer').show();
     });
