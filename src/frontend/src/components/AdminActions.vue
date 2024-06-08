@@ -7,74 +7,118 @@ export default {
 
   setup() {
     const currentTab = ref('towns');
-    const currentRecordId = ref(null);
-    const formData = ref({});
+    let initialRecordId = ref(null);
 
     const loadTable = (tab) => {
       currentTab.value = tab; // оновлюємо значення поточної таблиці на вибраний таб
 
+      // Завантаження даних з сервера
       fetch(`/api/${currentTab.value}/all`)
           .then(response => response.json())
           .then(data => {
+            // Викликаємо DataTables при завантаженні нових даних
             $(document).ready(function () {
               $('#adminTable').DataTable();
             });
-            // Очистити контейнер таблиці перед оновленням
-            const tableContainer = document.getElementById('tableContainer');
-            tableContainer.innerHTML = '';
 
-            // Створити таблицю
-            const table = document.createElement('table');
-            table.id = 'adminTable';
-            table.className = 'display';
-            table.style.width = '100%';
+            // Очистка контейнера таблиці перед оновленням
+            clearTableContainer();
 
-            // Додати заголовок таблиці
-            let header = '<thead><tr>';
-            for (let key in data[0]) {
-              header += `<th>${key}</th>`;
-            }
-            header += '<th>Actions</th></tr></thead>';
-            table.innerHTML += header;
+            // Створення таблиці
+            const table = createTable(data);
 
-            // Додати дані таблиці
-            const tbody = document.createElement('tbody');
-            data.forEach(row => {
-              const tr = document.createElement('tr');
-              for (let key in row) {
-                const td = document.createElement('td');
-                td.textContent = (typeof row[key] === 'object' && row[key].id !== undefined) ? row[key].id : row[key];
-                tr.appendChild(td);
-              }
-              const actionTd = document.createElement('td');
+            // Додавання таблиці до контейнера
+            appendTableToContainer(table);
 
-              const deleteBtn = document.createElement('button');
-              deleteBtn.className = 'small-button ligth w-button delete-btn';
-              deleteBtn.textContent = 'Delete';
-              actionTd.appendChild(deleteBtn);
-              tr.appendChild(actionTd);
-              tbody.appendChild(tr);
-            });
-            table.appendChild(tbody);
-
-            // Додати таблицю до контейнера
-            tableContainer.appendChild(table);
-
-
-
-
-            document.querySelectorAll('.delete-btn').forEach(deleteBtn => {
-              deleteBtn.addEventListener('click', function () {
-                const row = this.closest('tr');
-                const id = row.querySelector('td:first-child').textContent; // Припускається, що перший стовпець містить ID
-                deleteRow(id);
-              });
-            });
+            // Додавання обробника подій для видалення рядків
+            addDeleteRowHandler();
           })
           .catch(error => {
             console.error('Помилка при отриманні даних:', error);
           });
     };
+
+// Функція для очищення контейнера таблиці
+    const clearTableContainer = () => {
+      const tableContainer = document.getElementById('tableContainer');
+      tableContainer.innerHTML = '';
+    };
+
+// Функція для створення таблиці на основі даних
+    const createTable = (data) => {
+      const table = document.createElement('table');
+      table.id = 'adminTable';
+      table.className = 'display';
+      table.style.width = '100%';
+
+      // Додавання заголовка таблиці
+      const header = createTableHeader(data[0]);
+      table.innerHTML += header;
+
+      // Додавання даних таблиці
+      const tbody = createTableBody(data);
+      table.appendChild(tbody);
+
+      return table;
+    };
+
+// Функція для створення заголовка таблиці
+    const createTableHeader = (rowData) => {
+      let header = '<thead><tr>';
+      for (let key in rowData) {
+        header += `<th>${key}</th>`;
+      }
+      header += '<th>Actions</th></tr></thead>';
+      return header;
+    };
+
+// Функція для створення тіла таблиці
+    const createTableBody = (data) => {
+      const tbody = document.createElement('tbody');
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.addEventListener('click', () => rowClickHandler(row));
+        for (let key in row) {
+          const td = document.createElement('td');
+          td.textContent = (typeof row[key] === 'object' && row[key].id !== undefined) ? row[key].id : row[key];
+          tr.appendChild(td);
+        }
+        const actionTd = createDeleteAction();
+        tr.appendChild(actionTd);
+        tbody.appendChild(tr);
+      });
+      return tbody;
+    };
+
+// Функція для створення кнопки видалення рядка
+    const createDeleteAction = () => {
+      const actionTd = document.createElement('td');
+      const deleteImg = document.createElement('img');
+      deleteImg.src = '/image/delete.png';
+      deleteImg.className = 'delete-icon';
+      deleteImg.height = 40;
+      deleteImg.width = 40;
+      actionTd.appendChild(deleteImg);
+      return actionTd;
+    };
+
+// Функція для додавання таблиці до контейнера
+    const appendTableToContainer = (table) => {
+      const tableContainer = document.getElementById('tableContainer');
+      tableContainer.appendChild(table);
+    };
+
+// Функція для додавання обробника подій для видалення рядків
+    const addDeleteRowHandler = () => {
+      document.querySelectorAll('.delete-icon').forEach(deleteImg => {
+        deleteImg.addEventListener('click', function () {
+          const row = this.closest('tr');
+          const id = row.querySelector('td:first-child').textContent; // Припускається, що перший стовпець містить ID
+          deleteRow(id);
+        });
+      });
+    };
+
     const onTabClick = (event) => {
       const tab = event.target.getAttribute('data-tab');
       loadTable(tab);
@@ -82,50 +126,23 @@ export default {
     };
 
 
-    /*const editRow = id => {
-      currentRecordId.value = id; // Встановлення значення currentRecordId
-      fetch(`/api/${currentTab.value}/${id}`)
-          .then(response => response.json())
-          .then(record => {
-            let formHtml = '';
-            for (let key in record) {
-              formHtml += `<label for="${key}">${key}</label>`;
-              formHtml += `<input type="text" id="${key}" name="${key}" value="${record[key]}"><br>`;
-            }
-            formHtml += '<button class="button small" onclick="updateRecord()">Save</button>';
-            document.getElementById('editForm').innerHTML = formHtml;
-            document.getElementById('editFormContainer').style.display = 'block';
-          })
-          .catch(error => {
-            console.error('Помилка при отриманні запису для редагування:', error);
-          });
-    };*/
-
-    const showFieldsOfRow = () => {
-      document.getElementById('editForm').querySelectorAll('input').forEach(input => {
-        const inputName = input.getAttribute('name');
-        const inputValue = input.value;
-        if (inputName.endsWith('_id')) {
-          formData.value[inputName] = {id: inputValue};
-        } else {
-          formData.value[inputName] = inputValue;
-        }
-      });
-    };
-
     const updateRecord = () => {
-      showFieldsOfRow();
-
-      fetch(`/api/${currentTab.value}/${currentRecordId.value}`, {
+      const formData = new FormData(document.getElementById('createForm'));
+      const postData = {};
+      for (const [key, value] of Object.entries(Object.fromEntries(formData.entries()))) {
+        postData[key] = value;
+      }
+      fetch(`/api/${currentTab.value}/${initialRecordId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData.value)
+        body: JSON.stringify(postData),
       })
           .then(response => {
             if (response.ok) {
               console.log('Запис успішно оновлено');
+              loadTable(currentTab.value); // Перезавантажити таблицю після видалення
             } else {
               console.error('Помилка при оновленні запису');
             }
@@ -147,65 +164,125 @@ export default {
           });
     };
 
-    const choseTable = () => {
-      loadTable();
-      showCreateForm();
-    };
 
-    const showCreateForm = () => {
-      fetch(`/api/${currentTab.value}/all`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.length > 0) {
-              const record = data[0];
-              let formHtml = '<form id="createForm">';
-              for (let key in record) {
-                if (key !== 'id') {
-                  formHtml += `<label for="${key}">${key}</label>`;
-                  formHtml += `<input type="text" id="${key}" name="${key}" class="text-field w-input " ><br>`;
+    const createRecord = async () => {
+      try {
+        const formData = new FormData(document.getElementById('createForm'));
+        const postData = {};
+        for (const [key, value] of Object.entries(Object.fromEntries(formData.entries()))) {
+          postData[key] = value;
+        }
+
+        const response = await fetch(`/api/${currentTab.value}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData),
+        });
+
+        if (response.ok) {
+          console.log('Запис успішно створено');
+        } else {
+          console.error('Помилка при створенні запису');
+        }
+      } catch (error) {
+        console.error('Помилка при виконанні запиту:', error);
+      }
+      loadTable(currentTab.value)
+    }
+    const rowClickHandler = (row) => {
+      setFormValues(row);
+    };
+    const setFormValues = (row) => {
+
+      try {
+        const createForm = document.getElementById('createForm');
+        for (let key in row) {
+          if (key !== 'id') {
+            const inputField = createForm.querySelector(`#${key}`);
+            if (inputField) {
+              inputField.value = (typeof row[key] === 'object' && row[key].id !== undefined) ? row[key].id : row[key];
+            }
+          }
+          else {
+            initialRecordId = row[key];
+
+          }
+        }
+      } catch (error) {
+        console.error('Помилка при встановленні значень у поля вводу форми:', error);
+      }
+    };
+    const showCreateForm = async () => {
+      try {
+        const response = await fetch(`/api/${currentTab.value}/all`);
+        const data = await response.json();
+
+        if (data.length > 0) {
+          const record = data[0];
+          let formHtml = '<form id="createForm">';
+          for (let key in record) {
+            if (key !== 'id') {
+              if (key.endsWith('_id')) {
+                // Створіть select для полів з приставкою _id
+                formHtml += `<label for="${key}">${key}</label>`;
+                formHtml += `<select id="${key}" name="${key}" class="text-field w-input">`;
+                let endpoint = `/api/${key}`;
+
+                if (key === 'category_id') {
+                  endpoint = '/api/categories';
+                } else {
+                  endpoint = `/api/${key.replace('_id', 's')}`;
                 }
+                const optionsResponse = await fetch(endpoint + '/all');
+                const optionsData = await optionsResponse.json();
+                optionsData.forEach((option) => {
+                  let optionText = '';
+                  // Перевіряємо, чи значення є об'єктом
+                  if (typeof option === 'object') {
+                    // Якщо значення є об'єктом, виводимо всі його значення
+                    for (let nestedKey in option) {
+                      // Якщо внутрішнє значення є об'єктом і має id, виводимо його id
+                      if (typeof option[nestedKey] === 'object') {
+                        optionText += `${nestedKey}: ${option[nestedKey].id}, `;
+                      } else {
+                        optionText += `${nestedKey}: ${option[nestedKey]}, `;
+                      }
+                    }
+                  } else {
+                    optionText = option;
+                  }
+                  formHtml += `<option value="${option.id}">${optionText}</option>`;
+                });
+                formHtml += `</select><br>`;
+              } else {
+                // Створіть input для інших полів
+                formHtml += `<label for="${key}">${key}</label>`;
+                formHtml += `<input type="text" id="${key}" name="${key}" class="text-field w-input" value="${record[key]}"><br>`;
               }
-              formHtml += '</form>';
-              formHtml += '<button id="createButton" class="button small" style="margin: 5px" >Save</button>';
-              document.getElementById('createFormContainer').innerHTML = formHtml;
-              document.getElementById('createButton').addEventListener('click', function () {
-                createRecord();});
-              document.getElementById('createFormContainer').style.display = 'block';
             }
-          })
-          .catch(error => {
-            console.error('Помилка при отриманні даних для створення запису:', error);
-          });
+          }
+          formHtml += '</form>';
+          formHtml += '<button id="createButton" class="button small" style="margin: 5px" >Save</button>';
+          formHtml += '<button id="updateButton" class="button small" style="margin: 5px" >Update</button>';
+          document.getElementById('createFormContainer').innerHTML = formHtml;
+          document.getElementById('createButton').addEventListener('click', createRecord);
+          document.getElementById('updateButton').addEventListener('click', updateRecord);
+          document.getElementById('createFormContainer').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Помилка при отриманні даних для створення запису:', error);
+      }
     };
 
-    const createRecord = () => {
-      fetch(`/api/${currentTab.value}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(Object.fromEntries(formData)),
-      })
-          .then(response => {
-            if (response.ok) {
-              console.log('Запис успішно створено');
-            } else {
-              console.error('Помилка при створенні запису');
-            }
-          })
-          .catch(error => {
-            console.error('Помилка при виконанні запиту:', error);
-          });
-    };
 
     onMounted(() => {
       loadTable('towns');
       showCreateForm();
-// початкове завантаження таблиці з першим табом
     });
 
     return {
-      choseTable,
       createRecord,
       updateRecord,
       onTabClick,
@@ -217,9 +294,11 @@ export default {
 </script>
 
 <template>
-  <div>
+  <section>
     <div class="section black-gradient">
+      <div class="content-center">
       <h4 class="heading-9">Панель керування адміністратора</h4>
+      </div>
     </div>
     <div class="section light-grey">
       <div class="container">
@@ -235,9 +314,20 @@ export default {
                   data-bs-toggle="tab"
                   data-bs-target="#all-posts"
                   type="button"
-                  @click="onTabClick($event)"
-                  >
+                  @click="onTabClick($event)">
                 Towns
+              </button>
+            </li> <li class="nav-item" role="presentation">
+              <button
+                  class="nav-link"
+                  id="users"
+                  data-tab="users"
+                  value="users"
+                  data-bs-toggle="tab"
+                  data-bs-target="#all-posts"
+                  type="button"
+                  @click="onTabClick($event)">
+                Users
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -305,10 +395,9 @@ export default {
 
             </div>
           <div class="w-row">
-            <div class="w-col w-col-6">
-              <section>
-                <div id="tableContainer" class="table-container"></div>
-                <table id="adminTable" class="display" style="width:100%">
+              <div class="w-col w-col-6">
+                <div id="tableContainer" class="max-w overflow-x-auto table table-striped table-bordered"></div>
+                <table id="adminTable" class="display" >
                   <thead>
                   <tr>
                   </tr>
@@ -318,13 +407,6 @@ export default {
                   </tr>
                   </tbody>
                 </table>
-                <div id="editFormContainer" style="display:none;">
-                  <h2>Edit Record</h2>
-                  <form id="editForm">
-                    <!-- Динамічні текстові поля будуть додані сюди -->
-                  </form>
-                </div>
-              </section>
             </div>
             <div class="w-col w-col-6">
               <div class="w-form" id="createFormContainer" style="display:none;">
@@ -332,7 +414,6 @@ export default {
                   <a
                       href="#" class="small-button w-button">Створити</a>
                   <button onclick="createRecord()">Create</button>
-                  <button onclick="cancelCreate()">Cancel</button>
                 </form>
                 <div class="w-form-done">
                   <div>Thank you! Your submission has been received!</div>
@@ -346,7 +427,7 @@ export default {
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
@@ -364,15 +445,8 @@ export default {
   text-align: center;
 }
 
-.section {
-  height: 250px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .terms-card {
-  margin-top: -100px;
+  margin-top: -120px;
   min-width: 1200px;
 }
 .content-center{
@@ -385,7 +459,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 70px;
+
 }
 
 

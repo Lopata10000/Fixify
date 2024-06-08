@@ -39,5 +39,10 @@ export default {
 </script>
 
 <style scoped>
-/* ваші стилі тут */
+.nav-link{
+  display: flex;
+  justify-content: flex-start; /* Вирівнює елементи вліво */
+  align-items: center;
+  height: 36px;
+}
 </style>

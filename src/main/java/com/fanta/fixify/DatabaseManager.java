@@ -50,7 +50,7 @@ public class DatabaseManager {
                 }
                 categoryNames.add(categoryName);
                 pstmt.setString(1, categoryName);
-                pstmt.setObject(2, null); // Assuming parent_id is nullable and can be null
+                pstmt.setObject(2, 1); // Assuming parent_id is nullable and can be null
                 pstmt.addBatch();
             }
             pstmt.executeBatch();

@@ -53,7 +53,5 @@ export default({
 </script>
 
 <style scoped>
-.revie{
-  max-height: 300px;
-}
+
 </style>

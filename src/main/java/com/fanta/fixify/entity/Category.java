@@ -1,5 +1,6 @@
 package com.fanta.fixify.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Category {
     @Column(name = "category_name", nullable = false, unique = true, length = 100)
     private String categoryName;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parent_id", referencedColumnName = "category_id")
     private Category parent_id;

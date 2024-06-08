@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <NavBar />
-    <div class="page">
+
       <AdminActions />
-    </div >
+
     <AppFooter/>
     </div>
 </template>
@@ -22,8 +22,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url('https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.8f0c4ae76.css');
-
-
 </style>
+>
