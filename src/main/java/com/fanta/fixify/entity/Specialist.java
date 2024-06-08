@@ -34,4 +34,7 @@ public class Specialist {
     @Column(name = "services_offered", columnDefinition = "TEXT")
     private String servicesOffered;
 
+    public Specialist(Long id) {
+        this.id = id;
+    }
 }

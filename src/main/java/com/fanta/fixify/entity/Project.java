@@ -44,4 +44,7 @@ public class Project {
     @Column(name = "date_posted", nullable = false)
     private Timestamp datePosted;
 
+    public Project(Long id) {
+        this.id = id;
+    }
 }

@@ -26,4 +26,7 @@ public class Category {
     @JoinColumn(name = "parent_id", referencedColumnName = "category_id")
     private Category parent_id;
 
+    public Category(Long id) {
+        this.id = id;
+    }
 }

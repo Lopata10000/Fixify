@@ -40,4 +40,7 @@ public class Review {
     @Column(name = "date_posted", nullable = false)
     private Timestamp datePosted;
 
+    public Review(Long id) {
+        this.id = id;
+    }
 }

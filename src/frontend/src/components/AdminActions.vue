@@ -189,7 +189,7 @@ export default {
       } catch (error) {
         console.error('Помилка при виконанні запиту:', error);
       }
-      loadTable(currentTab.value)
+      // loadTable(currentTab.value)
     }
     const rowClickHandler = (row) => {
       setFormValues(row);
@@ -227,7 +227,7 @@ export default {
               if (key.endsWith('_id')) {
                 // Створіть select для полів з приставкою _id
                 formHtml += `<label for="${key}">${key}</label>`;
-                formHtml += `<select id="${key}" name="${key}" class="text-field w-input">`;
+                formHtml += `<select id="${key}" name="${key}" class="form-dropdown w-select">`;
                 let endpoint = `/api/${key}`;
 
                 if (key === 'category_id') {

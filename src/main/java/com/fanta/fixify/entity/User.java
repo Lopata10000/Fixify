@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String address;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
@@ -87,5 +87,7 @@ public class User implements UserDetails {
         return true;
     }
 
-
+    public User(Long id) {
+        this.id = id;
+    }
 }
