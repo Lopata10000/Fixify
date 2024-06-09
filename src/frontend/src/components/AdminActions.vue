@@ -1,10 +1,15 @@
 <script>
 import {ref, onMounted} from 'vue';
 import $ from 'jquery';
-import 'datatables.net';
+import 'select2/dist/css/select2.min.css';
+import 'select2/dist/js/select2.min.js';
 
 export default {
-
+  data() {
+    return {
+      showModal: true
+    }
+  },
   setup() {
     const currentTab = ref('towns');
     let initialRecordId = ref(null);
@@ -48,7 +53,7 @@ export default {
     const createTable = (data) => {
       const table = document.createElement('table');
       table.id = 'adminTable';
-      table.className = 'display';
+      table.className = 'display table-auto w-full border-collapse border border-gray-300 rounded-lg';
       table.style.width = '100%';
 
       // Додавання заголовка таблиці
@@ -64,19 +69,23 @@ export default {
 
 // Функція для створення заголовка таблиці
     const createTableHeader = (rowData) => {
-      let header = '<thead><tr>';
+      let header = '<thead class="bg-blue-200"><tr>';
       for (let key in rowData) {
         header += `<th>${key}</th>`;
       }
       header += '<th>Actions</th></tr></thead>';
       return header;
     };
-
+    const initializeSelect2 = () => {
+      $('.form-dropdown').select2();
+    }
 // Функція для створення тіла таблиці
     const createTableBody = (data) => {
+
       const tbody = document.createElement('tbody');
       data.forEach(row => {
         const tr = document.createElement('tr');
+
         tr.addEventListener('click', () => rowClickHandler(row));
         for (let key in row) {
           const td = document.createElement('td');
@@ -95,9 +104,10 @@ export default {
       const actionTd = document.createElement('td');
       const deleteImg = document.createElement('img');
       deleteImg.src = '/image/delete.png';
-      deleteImg.className = 'delete-icon';
-      deleteImg.height = 40;
-      deleteImg.width = 40;
+      deleteImg.className = 'delete-icon justify-end';
+      deleteImg.height = 20;
+      deleteImg.width = 20;
+
       actionTd.appendChild(deleteImg);
       return actionTd;
     };
@@ -189,7 +199,7 @@ export default {
       } catch (error) {
         console.error('Помилка при виконанні запиту:', error);
       }
-      // loadTable(currentTab.value)
+      loadTable(currentTab.value)
     }
     const rowClickHandler = (row) => {
       setFormValues(row);
@@ -204,8 +214,7 @@ export default {
             if (inputField) {
               inputField.value = (typeof row[key] === 'object' && row[key].id !== undefined) ? row[key].id : row[key];
             }
-          }
-          else {
+          } else {
             initialRecordId = row[key];
 
           }
@@ -214,6 +223,7 @@ export default {
         console.error('Помилка при встановленні значень у поля вводу форми:', error);
       }
     };
+
     const showCreateForm = async () => {
       try {
         const response = await fetch(`/api/${currentTab.value}/all`);
@@ -227,7 +237,7 @@ export default {
               if (key.endsWith('_id')) {
                 // Створіть select для полів з приставкою _id
                 formHtml += `<label for="${key}">${key}</label>`;
-                formHtml += `<select id="${key}" name="${key}" class="form-dropdown w-select">`;
+                formHtml += `<select id="${key}" name="${key}" class="form-dropdown w-select w-[300px]">`;
                 let endpoint = `/api/${key}`;
 
                 if (key === 'category_id') {
@@ -255,17 +265,22 @@ export default {
                   }
                   formHtml += `<option value="${option.id}">${optionText}</option>`;
                 });
-                formHtml += `</select><br>`;
+                formHtml += `</select>`;
               } else {
                 // Створіть input для інших полів
-                formHtml += `<label for="${key}">${key}</label>`;
-                formHtml += `<input type="text" id="${key}" name="${key}" class="text-field w-input" value="${record[key]}"><br>`;
+                formHtml += `<div class="field-block">`;
+                formHtml += `<label class="lableField" for="${key}" >${key}</label>`;
+                formHtml += `<input style="margin-top: 0px; margin-bottom: 10px" type="text" id="${key}" name="${key}" class="text-field w-input" value="${record[key]}">`;
+                formHtml += `</div>`;
+
               }
             }
           }
+          formHtml += `<div class="flex justify-center space-x-4 mt-4">`;
+          formHtml += '<button id="createButton" class="button small" style="margin: 5px">Save</button>';
+          formHtml += '<button id="updateButton" class="button small" style="margin: 5px">Update</button>';
+          formHtml += `</div>`;
           formHtml += '</form>';
-          formHtml += '<button id="createButton" class="button small" style="margin: 5px" >Save</button>';
-          formHtml += '<button id="updateButton" class="button small" style="margin: 5px" >Update</button>';
           document.getElementById('createFormContainer').innerHTML = formHtml;
           document.getElementById('createButton').addEventListener('click', createRecord);
           document.getElementById('updateButton').addEventListener('click', updateRecord);
@@ -280,6 +295,7 @@ export default {
     onMounted(() => {
       loadTable('towns');
       showCreateForm();
+      initializeSelect2();
     });
 
     return {
@@ -295,143 +311,155 @@ export default {
 
 <template>
   <section>
-    <div class="section black-gradient">
+    <div class="section black-gradient ">
       <div class="content-center">
-      <h4 class="heading-9">Панель керування адміністратора</h4>
+        <h4 class="heading-9">Панель керування адміністратора</h4>
       </div>
     </div>
     <div class="section light-grey">
       <div class="container">
-          <div class="terms-card">
-            <div class="content-center">
-          <ul class="nav nav-tabs position-relative" id="tables" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link active"
-                  id="towns"
-                  data-tab="towns"
-                  value="towns"
-                  data-bs-toggle="tab"
-                  data-bs-target="#all-posts"
-                  type="button"
-                  @click="onTabClick($event)">
-                Towns
-              </button>
-            </li> <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link"
-                  id="users"
-                  data-tab="users"
-                  value="users"
-                  data-bs-toggle="tab"
-                  data-bs-target="#all-posts"
-                  type="button"
-                  @click="onTabClick($event)">
-                Users
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link"
-                  id="categories"
-                  data-tab="categories"
-                  value="categories"
-                  data-bs-toggle="tab"
-                  type="button"
-                  aria-selected="false"
-                  @click="onTabClick($event)">
-                Categories
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link"
-                  id="specialists"
-                  data-tab="specialists"
-                  data-bs-toggle="tab"
-                  type="button"
-                  aria-selected="false"
-                  @click="onTabClick($event)">
-                Specialists
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link"
-                  id="tasks"
-                  data-bs-toggle="tab"
-                  type="button"
-                  aria-selected="false"
-                  data-tab="tasks"
-                  @click="onTabClick($event)">
-                Tasks
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link"
-                  id="reviews"
-                  data-tab="reviews"
-                  data-bs-toggle="tab"
-                  type="button"
-                  aria-selected="false"
-                  @click="onTabClick($event)">
-                Reviews
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                  class="nav-link"
-                  id="projects"
-                  data-tab="projects"
-                  data-bs-toggle="tab"
-                  type="button"
-                  aria-selected="false"
-                  @click="onTabClick($event)">
-                Projects
-              </button>
-            </li>
-          </ul>
+        <div class="terms-card">
+          <div class="content-center">
+            <ul class="nav nav-tabs position-relative" id="tables" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link active"
+                    id="towns"
+                    data-tab="towns"
+                    value="towns"
+                    data-bs-toggle="tab"
+                    data-bs-target="#all-posts"
+                    type="button"
+                    @click="onTabClick($event)">
+                  Towns
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="users"
+                    data-tab="users"
+                    value="users"
+                    data-bs-toggle="tab"
+                    data-bs-target="#all-posts"
+                    type="button"
+                    @click="onTabClick($event)">
+                  Users
+                </button>
 
-            </div>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="categories"
+                    data-tab="categories"
+                    value="categories"
+                    data-bs-toggle="tab"
+                    type="button"
+                    aria-selected="false"
+                    @click="onTabClick($event)">
+                  Categories
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="specialists"
+                    data-tab="specialists"
+                    data-bs-toggle="tab"
+                    type="button"
+                    aria-selected="false"
+                    @click="onTabClick($event)">
+                  Specialists
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="tasks"
+                    data-bs-toggle="tab"
+                    type="button"
+                    aria-selected="false"
+                    data-tab="tasks"
+                    @click="onTabClick($event)">
+                  Tasks
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="reviews"
+                    data-tab="reviews"
+                    data-bs-toggle="tab"
+                    type="button"
+                    aria-selected="false"
+                    @click="onTabClick($event)">
+                  Reviews
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="projects"
+                    data-tab="projects"
+                    data-bs-toggle="tab"
+                    type="button"
+                    aria-selected="false"
+                    @click="onTabClick($event)">
+                  Projects
+                </button>
+              </li>
+            </ul>
+
+          </div>
           <div class="w-row">
-              <div class="w-col w-col-6">
-                <div id="tableContainer" class="max-w overflow-x-auto table table-striped table-bordered"></div>
-                <table id="adminTable" class="display" >
-                  <thead>
-                  <tr>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                  </tr>
-                  </tbody>
-                </table>
+            <div class="w-col w-col-6 w-3/5">
+              <div id="tableContainer" class=" overflow-x-auto  "></div>
+              <table id="adminTable" class="table-auto w-full border-collapse border border-gray-300 rounded-lg" >
+                <thead class="bg-blue-200">
+                <tr>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="w-col w-col-6">
-              <div class="w-form" id="createFormContainer" style="display:none;">
-                <form id="createForm">
-                  <a
-                      href="#" class="small-button w-button">Створити</a>
-                  <button onclick="createRecord()">Create</button>
-                </form>
-                <div class="w-form-done">
-                  <div>Thank you! Your submission has been received!</div>
-                </div>
-                <div class="w-form-fail">
-                  <div>Oops! Something went wrong while submitting the form.</div>
+            <div class="content-center">
+              <div class="create-form" id="createFormContainer">
+
+              </div>
+              <button @click="showModal = true">Показати модальне вікно</button>
+              <div v-if="showModal" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class = "modal-header">
+                      <h5 class="modal-title">Модальне вікно</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Цей текст буде відображатися у модальному вікні.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                      <button type="button" class="btn btn-primary">Зберегти зміни</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   </section>
 </template>
 
 <style scoped>
-@import url('https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.8f0c4ae76.css');
+
 @import url('https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css');
 
 .heading-9 {
@@ -446,21 +474,38 @@ export default {
 }
 
 .terms-card {
-  margin-top: -120px;
+  margin-top: -80px;
   min-width: 1200px;
 }
-.content-center{
+
+.content-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
 }
-.light-grey{
+
+.light-grey {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 70px;
 
 }
+
+.create-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.w-row{
+  margin-top: 40px;
+}
+.section.black-gradient{
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+
 
 
 </style>

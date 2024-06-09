@@ -5,7 +5,7 @@
         <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
         <p align="center"  class="paragraph large">Хто ти? </p>
         <div class="center">
-        <button class="button w-button" @click="showRegistrationFields('ADMIN')">Замовник</button>
+        <button class="button " @click="showRegistrationFields('ADMIN')">Замовник</button>
         <button class="button w-button" @click="showRegistrationFields('MANAGER')">Фахівець</button>
       </div>
       </div>
@@ -154,6 +154,7 @@ export default {
 
 <style scoped>
 @import url('https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.8f0c4ae76.css');
+
 #error-message {
   text-align: center;
   color: white;
@@ -180,7 +181,6 @@ export default {
   opacity: 0;
 }
 .w-button{
-  width: 140px;
   margin: 5px;
 }
 
