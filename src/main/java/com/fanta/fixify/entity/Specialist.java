@@ -1,9 +1,12 @@
 package com.fanta.fixify.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,11 +22,19 @@ public class Specialist {
 
     @ManyToOne
     @JoinColumn(name = "user_id", unique = true)
-    private User user_id;
+    private User userId;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category_id;
+    private Category categoryId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "specialistId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> projects;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "specialistId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;

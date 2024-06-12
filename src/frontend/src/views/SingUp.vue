@@ -22,7 +22,7 @@
 
         <input id="phoneNumber" class="text-field w-input" v-model="phoneNumber" style="width: 300px;" maxlength="10" name="phoneNumber" data-orig-size="10" required placeholder="Ваш номер телефону" type="tel"/>
         <input id="email" autoComplete="email" class="text-field w-input" style="margin-top: 19px" v-model="email" maxlength="256" name="email" placeholder="Ваша електронна адреса" required type="email"/>
-        <input id="wf-sign-up-password" class="text-field-copy w-input" v-model="password" maxlength="256" minlength="8" name="password" placeholder="Ваш пароль" required type="password"/>
+        <input id="wf-sign-up-password" class="text-field  w-input" v-model="password" maxlength="256" minlength="8" name="password" placeholder="Ваш пароль" required type="password"/>
         <label class="w-checkbox checkbox-field">
           <input id="wf-sign-up-accept-privacy" class="w-checkbox-input check-box" v-model="acceptPrivacy" data-name="Checkbox" data-wf-user-field="wf-user-field-accept-privacy" name="Checkbox" required type="checkbox"/>
           <span class="checkbox-label w-form-label">Я згоден з політикою конфіденційності</span>
@@ -145,15 +145,18 @@ export default {
           }
         });
       } catch (error) {
-        this.showError(error.message);
+        await Swal.fire({
+          title: 'Така електронна адреса уже використовується.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
       }
     }
-    }
-  };
+}
+}
 </script>
 
 <style scoped>
-@import url('https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.8f0c4ae76.css');
 
 #error-message {
   text-align: center;
@@ -183,6 +186,7 @@ export default {
 .w-button{
   margin: 5px;
 }
+
 
 /* Стилі для зникнення */
 .fade-out {

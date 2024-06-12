@@ -21,15 +21,15 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user_id;
+    private User userId;
 
     @ManyToOne
     @JoinColumn(name = "specialist_id", nullable = false)
-    private Specialist specialist_id;
+    private Specialist specialistId;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
-    private Project project_id;
+    private Project projectId;
 
     @Column(name = "rating", nullable = false)
     private int rating;

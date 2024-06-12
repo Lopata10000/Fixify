@@ -11,12 +11,23 @@
           aria-modal="true"
       >
         <h3>Do you confirm?</h3>
+        <star-rating
+            :rating="3.5"
+            :increment="0.5"
+            :read-only="true"
+            :star-size="20"
+            :active-color="'#FFD700'"
+            :inactive-color="'#C0C0C0'"
+        />
         <div class="flex justify-center py-4 text-white">
           <!-- We will handle these emits later -->
           <button @click="$emit('close')" class="border border-black bg-white text-black mr-4">No</button>
           <button @click="$emit('close')">Yes</button>
+
         </div>
       </div>
     </div>
   </div>
 </template>
+<script setup>
+</script>

@@ -1,28 +1,29 @@
 <template>
   <div id="app">
     <NavBar />
-
-      <AdminActions />
+      <UserProjects/>
 
     <AppFooter/>
-    </div>
+  </div>
 </template>
 
 <script>
 import NavBar from '/src/components/NavigationBar.vue';
-import AdminActions from '/src/components/AdminActions.vue';
 import AppFooter from '/src/components/AppFooter.vue';
+import UserProjects from '/src/components/UserProjects.vue';
 
 export default {
   components: {
     NavBar,
-    AdminActions,
+    UserProjects,
     AppFooter,
   },
 };
 </script>
 
-<style scoped>
+<style scoped >
 
- </style>
+
+/* ваші стилі тут */
+</style>
 >

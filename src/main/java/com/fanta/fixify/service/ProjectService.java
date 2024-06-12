@@ -1,6 +1,7 @@
 package com.fanta.fixify.service;
 
 import com.fanta.fixify.entity.Project;
+import com.fanta.fixify.entity.User;
 import com.fanta.fixify.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,15 @@ public class ProjectService {
 
     public Optional<Project> getProjectById(Long id) {
         return projectRepository.findById(id);
+    }
+    public List<Project> getActiveProjectsByUser(User user) {
+        return projectRepository.findByUserIdAndStatus(user, "В роботі");
+    }
+    public List<Project> getAwaitProjectsByUser(User user) {
+        return projectRepository.findByUserIdAndStatus(user, "Очікує");
+    }
+    public List<Project> getArchiveProjectsByUser(User user) {
+        return projectRepository.findByUserIdAndStatus(user, "Виконано");
     }
 
     public Project createProject(Project project) {

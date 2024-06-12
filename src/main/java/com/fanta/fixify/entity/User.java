@@ -1,6 +1,7 @@
 package com.fanta.fixify.entity;
 
 import com.fanta.fixify.token.Token;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,13 +44,20 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
-
-
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> projects;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Specialist> specialists;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

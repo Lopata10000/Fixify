@@ -1,6 +1,7 @@
 package com.fanta.fixify.controller;
 
 import com.fanta.fixify.entity.Project;
+import com.fanta.fixify.entity.User;
 import com.fanta.fixify.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,24 @@ public class ProjectController {
     public Project getProjectById(@PathVariable Long id) {
         return projectService.getProjectById(id)
                 .orElse(null); // or throw exception
+    }
+
+    @GetMapping("/user/{user_id}/active")
+    public List<Project> getActiveProjectsByUser(@PathVariable Long user_id) {
+        User user = new User(user_id);
+        return projectService.getActiveProjectsByUser(user);
+    }
+
+    @GetMapping("/user/{user_id}/await")
+    public List<Project> getAwaitProjectsByUser(@PathVariable Long user_id) {
+        User user = new User(user_id);
+        return projectService.getAwaitProjectsByUser(user);
+    }
+
+    @GetMapping("/user/{user_id}/archive")
+    public List<Project> getArchiveProjectsByUser(@PathVariable Long user_id) {
+        User user = new User(user_id);
+        return projectService.getArchiveProjectsByUser(user);
     }
 
     @PostMapping

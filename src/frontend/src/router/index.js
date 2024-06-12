@@ -4,6 +4,8 @@ import SignUp from '../views/SingUp.vue';
 import LogIn from '../views/LogIn.vue';
 import AccessDenied from '../views/AccessDenied.vue';
 import AdminPanel from '../views/AdminPanel.vue';
+import NewTask from '../views/NewTask.vue';
+import UserDashboard from '../views/UserDashboard.vue';
 
 const routes = [
     {
@@ -26,6 +28,18 @@ const routes = [
         path: '/admin-panel',
         name: 'AdminPanel',
         component: AdminPanel
+    }, {
+        path: '/dashboard',
+        name: 'UserDashboard',
+        component: UserDashboard
+    }, {
+        path: '/newp-review',
+        name: 'UserDashboard',
+        component: UserDashboard
+    }, {
+        path: '/new-task',
+        name: 'NewTask',
+        component: NewTask
     }
 ];
 

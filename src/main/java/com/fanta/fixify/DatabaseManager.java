@@ -120,17 +120,20 @@ public class DatabaseManager {
     }
 
     public void addProjects(int count) {
-        String query = "INSERT INTO projects (user_id, specialist_id, category_id, title, description, budget, date_posted) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO projects (user_id, specialist_id, category_id, title, description, address, status, budget, date, town_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             for (int i = 0; i < count; i++) {
-                pstmt.setInt(1, faker.number().numberBetween(1, 200)); // Assuming user_id is between 1 and 50
-                pstmt.setInt(2, faker.number().numberBetween(1, 200)); // Assuming specialist_id is between 1 and 50
-                pstmt.setInt(3, faker.number().numberBetween(1, 200)); // Assuming category_id is between 1 and 10
+                pstmt.setLong(1, faker.number().numberBetween(1, 200)); // Assuming user_id is between 1 and 200
+                pstmt.setLong(2, faker.number().numberBetween(1, 200)); // Assuming specialist_id is between 1 and 200
+                pstmt.setLong(3, faker.number().numberBetween(1, 200)); // Assuming category_id is between 1 and 200
                 pstmt.setString(4, faker.lorem().sentence());
                 pstmt.setString(5, faker.lorem().paragraph());
-                pstmt.setBigDecimal(6, BigDecimal.valueOf(faker.number().randomDouble(2, 50, 5000)));
-                pstmt.setTimestamp(7, new java.sql.Timestamp(System.currentTimeMillis()));
+                pstmt.setString(6, faker.address().fullAddress());
+                pstmt.setString(7, "Очікує");
+                pstmt.setBigDecimal(8, BigDecimal.valueOf(faker.number().randomDouble(2, 50, 5000)));
+                pstmt.setTimestamp(9, new java.sql.Timestamp(System.currentTimeMillis()));
+                pstmt.setLong(10, faker.number().numberBetween(1, 200)); // Assuming town_id is between 1 and 200
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
@@ -138,6 +141,7 @@ public class DatabaseManager {
             System.out.println(e.getMessage());
         }
     }
+
 
     public void addReviews(int count) {
         String query = "INSERT INTO reviews (user_id, specialist_id, project_id, rating, comment, date_posted) VALUES (?, ?, ?, ?, ?, ?)";

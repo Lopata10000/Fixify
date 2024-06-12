@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +26,23 @@ public class Category {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parent_id", referencedColumnName = "category_id")
-    private Category parent_id;
+    private Category parentId;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoryId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> projects;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoryId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Specialist> specialists;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoryId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Category> childCategories;
     public Category(Long id) {
         this.id = id;
     }

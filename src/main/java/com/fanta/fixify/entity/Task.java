@@ -22,6 +22,6 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category_id;
+    private Category categoryId;
 
 }

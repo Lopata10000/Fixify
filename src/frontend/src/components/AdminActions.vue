@@ -1,8 +1,10 @@
 <script>
 import {ref, onMounted} from 'vue';
 import $ from 'jquery';
+import Swal from 'sweetalert2';
 import 'select2/dist/css/select2.min.css';
 import 'select2/dist/js/select2.min.js';
+import axios from 'axios';
 
 export default {
   data() {
@@ -39,7 +41,7 @@ export default {
             addDeleteRowHandler();
           })
           .catch(error => {
-            console.error('Помилка при отриманні даних:', error);
+            showErrorMessage(error);
           });
     };
 
@@ -124,7 +126,7 @@ export default {
         deleteImg.addEventListener('click', function () {
           const row = this.closest('tr');
           const id = row.querySelector('td:first-child').textContent; // Припускається, що перший стовпець містить ID
-          deleteRow(id);
+          confirmDelete(id);
         });
       });
     };
@@ -151,14 +153,14 @@ export default {
       })
           .then(response => {
             if (response.ok) {
-              console.log('Запис успішно оновлено');
-              loadTable(currentTab.value); // Перезавантажити таблицю після видалення
+              showSuccessMessage()
             } else {
-              console.error('Помилка при оновленні запису');
+              showErrorMessage()
+
             }
           })
           .catch(error => {
-            console.error('Помилка при виконанні запиту:', error);
+            showErrorMessage(error)
           });
     };
 
@@ -167,13 +169,30 @@ export default {
         method: 'DELETE'
       })
           .then(() => {
-            loadTable(currentTab.value); // Перезавантажити таблицю після видалення
+            showSuccessMessage();
+            loadTable(currentTab.value);
           })
+
           .catch(error => {
-            console.error('Помилка при видаленні запису:', error);
+            showErrorMessage(error)
           });
     };
-
+    const confirmDelete = (id) => {
+      Swal.fire({
+        title: 'Ви впевнені?',
+        text: "Після видалення цього запису всі інші записи, що мають посилання на нього, також будуть видалені.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Так, видалити!',
+        cancelButtonText: 'Відмінити'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteRow(id);
+        }
+      });
+    };
 
     const createRecord = async () => {
       try {
@@ -183,23 +202,19 @@ export default {
           postData[key] = value;
         }
 
-        const response = await fetch(`/api/${currentTab.value}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(postData),
+        const response = await axios.post(`/api/${currentTab.value}`, postData, {
+          returnPromise: false
         });
 
-        if (response.ok) {
-          console.log('Запис успішно створено');
+        if (response.status === 200) {
+          showSuccessMessage();
+
         } else {
-          console.error('Помилка при створенні запису');
+          showErrorMessage();
         }
       } catch (error) {
-        console.error('Помилка при виконанні запиту:', error);
+        showErrorMessage(error);
       }
-      loadTable(currentTab.value)
     }
     const rowClickHandler = (row) => {
       setFormValues(row);
@@ -220,7 +235,7 @@ export default {
           }
         }
       } catch (error) {
-        console.error('Помилка при встановленні значень у поля вводу форми:', error);
+        showErrorMessage(error)
       }
     };
 
@@ -234,16 +249,16 @@ export default {
           let formHtml = '<form id="createForm">';
           for (let key in record) {
             if (key !== 'id') {
-              if (key.endsWith('_id')) {
-                // Створіть select для полів з приставкою _id
+              if (key.endsWith('Id')) {
+                // Створіть select для полів з приставкою Id
                 formHtml += `<label for="${key}">${key}</label>`;
                 formHtml += `<select id="${key}" name="${key}" class="form-dropdown w-select w-[300px]">`;
                 let endpoint = `/api/${key}`;
 
-                if (key === 'category_id') {
+                if (key === 'categoryId') {
                   endpoint = '/api/categories';
                 } else {
-                  endpoint = `/api/${key.replace('_id', 's')}`;
+                  endpoint = `/api/${key.replace('Id', 's')}`;
                 }
                 const optionsResponse = await fetch(endpoint + '/all');
                 const optionsData = await optionsResponse.json();
@@ -277,8 +292,8 @@ export default {
             }
           }
           formHtml += `<div class="flex justify-center space-x-4 mt-4">`;
-          formHtml += '<button id="createButton" class="button small" style="margin: 5px">Save</button>';
-          formHtml += '<button id="updateButton" class="button small" style="margin: 5px">Update</button>';
+          formHtml += '<button id="createButton"  class="button small" style="margin: 5px">Save</button>';
+          formHtml += '<button id="updateButton"  class="button small" style="margin: 5px">Update</button>';
           formHtml += `</div>`;
           formHtml += '</form>';
           document.getElementById('createFormContainer').innerHTML = formHtml;
@@ -287,10 +302,23 @@ export default {
           document.getElementById('createFormContainer').style.display = 'block';
         }
       } catch (error) {
-        console.error('Помилка при отриманні даних для створення запису:', error);
+       showErrorMessage(error);
       }
     };
-
+    const showSuccessMessage = () => {
+      Swal.fire({
+        title: 'Зміни у таблиці виконані',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+    }
+    const showErrorMessage = () => {
+      Swal.fire({
+        title: 'Невірні дані',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
 
     onMounted(() => {
       loadTable('towns');
@@ -430,7 +458,6 @@ export default {
               <div class="create-form" id="createFormContainer">
 
               </div>
-              <button @click="showModal = true">Показати модальне вікно</button>
               <div v-if="showModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -474,7 +501,7 @@ export default {
 }
 
 .terms-card {
-  margin-top: -80px;
+  margin-top: -120px;
   min-width: 1200px;
 }
 

@@ -1,33 +1,32 @@
-<template>
-  <div id="app">
-    <NavBar />
-    <div class="page-wrapper">
-      <ServiceSearch />
-      <ReviewsSection />
+  <template>
+    <div id="app">
+      <NavBar />
+      <div class="page-wrapper">
+        <ServiceSearch />
+        <ReviewsSection />
+
+      </div>
+      <AppFooter/>
     </div>
-    <AppFooter/>
-  </div>
-</template>
+  </template>
 
-<script>
-import NavBar from '/src/components/NavigationBar.vue';
-import ServiceSearch from '/src/components/ServiceSearch.vue';
-import ReviewsSection from '/src/components/ReviewsSection.vue';
-import AppFooter from '/src/components/AppFooter.vue';
+  <script>
+  import NavBar from '/src/components/NavigationBar.vue';
+  import ServiceSearch from '/src/components/ServiceSearch.vue';
+  import ReviewsSection from '/src/components/ReviewsSection.vue';
+  import AppFooter from '/src/components/AppFooter.vue';
 
-export default {
-  components: {
-    NavBar,
-    ServiceSearch,
-    ReviewsSection,
-    AppFooter,
-  },
-};
-</script>
+  export default {
+    components: {
+      NavBar,
+      ServiceSearch,
+      ReviewsSection,
+      AppFooter,
+    },
+  };
+  </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Noto+Serif:wght@400;700&family=Volkhov:wght@400;700&display=swap');
+  <style scoped >
 
-/* ваші стилі тут */
-</style>
->
+
+  </style>

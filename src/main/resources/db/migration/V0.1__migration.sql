@@ -10,7 +10,8 @@ BEGIN
             full_name VARCHAR(255),
             phone_number VARCHAR NOT NULL ,
             address VARCHAR(255),
-            registration_date TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,            role VARCHAR(40) NOT NULL
+            registration_date TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            role VARCHAR(40) NOT NULL
         );
     END IF;
 END
@@ -52,19 +53,7 @@ BEGIN
 END
 $$;
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'tasks') THEN
-        CREATE TABLE tasks (
-            task_id SERIAL PRIMARY KEY,
-            task_name VARCHAR(255) NOT NULL,
-            category_id INT,
-            FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE SET NULL
-        );
-    END IF;
-END
-$$;
+
 
 DO
 $$
@@ -84,14 +73,18 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'projects') THEN
         CREATE TABLE projects (
             project_id SERIAL PRIMARY KEY,
-            user_id INT NOT NULL,
-            specialist_id INT NOT NULL,
-            category_id INT NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT,
+            user_id INT NOT NULL,
+            specialist_id INT,
+            category_id INT NOT NULL,
+            town_id INT NOT NULL,
+            address VARCHAR NOT NULL,
             budget NUMERIC(10, 2) NOT NULL,
-            date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            status VARCHAR(50) NOT NULL,
+            date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+            FOREIGN KEY (town_id) REFERENCES towns(town_id) ON DELETE CASCADE,
             FOREIGN KEY (specialist_id) REFERENCES specialists(specialist_id) ON DELETE CASCADE,
             FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
         );
@@ -119,34 +112,5 @@ BEGIN
 END
 $$;
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'messages') THEN
-        CREATE TABLE messages (
-            message_id SERIAL PRIMARY KEY,
-            user_id INT NOT NULL,
-            recipient_id INT NOT NULL,
-            message_body TEXT,
-            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-            FOREIGN KEY (recipient_id) REFERENCES users(user_id) ON DELETE CASCADE
-        );
-    END IF;
-END
-$$;
 
-DO
-$$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'sessions') THEN
-        CREATE TABLE sessions (
-            session_id SERIAL PRIMARY KEY,
-            user_id INT NOT NULL,
-            token VARCHAR(255) NOT NULL,
-            expiry_date TIMESTAMP NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-        );
-    END IF;
-END
-$$;
+

@@ -115,6 +115,9 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Add your styles here */
+<style >
+a {
+  color: black;
+  text-decoration: none;
+}
 </style>
