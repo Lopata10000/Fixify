@@ -45,12 +45,12 @@ export default {
       this.formData = {
         title: this.formData.title,
         description: this.formData.description,
-        town_id: this.formData.town_id,
+        townId: this.formData.town_id,
         address: this.formData.address,
         date: new Date(),
         budget: this.formData.budget,
-        category_id: 1,
-        user_id: 1,
+        categoryId: 1,
+        userId: 10,
       };
       await axios.post('/api/projects', this.formData)
           .then(response => {

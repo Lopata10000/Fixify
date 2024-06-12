@@ -314,7 +314,7 @@ export default {
     }
     const showErrorMessage = () => {
       Swal.fire({
-        title: 'Невірні дані',
+        title: 'Місто з такою назвою вже існує',
         icon: 'error',
         confirmButtonText: 'OK'
       });

@@ -76,7 +76,7 @@ export default {
             icon: 'success',
             confirmButtonText: 'OK',
           });
-          window.location.href = '/private/new-event.html';
+          window.location.href = "/new-task";
         } else {
           await Swal.fire({
             title: 'Невірний логін або пароль',

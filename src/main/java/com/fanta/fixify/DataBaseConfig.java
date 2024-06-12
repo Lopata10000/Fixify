@@ -7,15 +7,15 @@ public interface DataBaseConfig {
     /**
      * The constant url.
      */
-    public final static String URL = "jdbc:postgresql://localhost:5433/fixify";
+    public final static String URL = "jdbc:postgresql://dpg-cpkpoe7sc6pc73f2510g-a.frankfurt-postgres.render.com/fixify_22fl";
     /**
      * The constant user.
      */
-    public final static String USER = "postgres";
+    public final static String USER = "fixify_22fl_user";
     /**
      * The constant password.
      */
-    public final static String PASSWORD = "45435";
+    public final static String PASSWORD = "8hrL1ZSNBxx25TxAjseXWvhlcsa1foRj";
 
 
 }

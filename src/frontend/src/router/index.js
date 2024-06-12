@@ -6,6 +6,7 @@ import AccessDenied from '../views/AccessDenied.vue';
 import AdminPanel from '../views/AdminPanel.vue';
 import NewTask from '../views/NewTask.vue';
 import UserDashboard from '../views/UserDashboard.vue';
+import CreateReview from '../views/CreateReview.vue';
 
 const routes = [
     {
@@ -33,9 +34,9 @@ const routes = [
         name: 'UserDashboard',
         component: UserDashboard
     }, {
-        path: '/newp-review',
-        name: 'UserDashboard',
-        component: UserDashboard
+        path: '/create-review',
+        name: 'CreateReview',
+        component: CreateReview
     }, {
         path: '/new-task',
         name: 'NewTask',

@@ -141,7 +141,7 @@ export default {
           confirmButtonText: 'OK'
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = "../private/new-event.html";
+            window.location.href = "/new-task";
           }
         });
       } catch (error) {
