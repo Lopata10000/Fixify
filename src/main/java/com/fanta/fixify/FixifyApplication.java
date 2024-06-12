@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @SpringBootApplication
+@EnableJpaRepositories
+
 public class FixifyApplication {
 
 	public static void main(String[] args) {
