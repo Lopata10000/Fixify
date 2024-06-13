@@ -8,35 +8,14 @@ FROM amazoncorretto:17
 COPY --from=build /app/target/*.jar fixify.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "fixify.jar"]
-RUN apt-get update && apt-get install -y nodejs npm
-
-# Copy frontend code
-WORKDIR /app/frontend
-#COPY src/frontend/package*.json ./
-RUN npm install
-COPY frontend. .
-
-# Expose port 3000 for frontend
-EXPOSE 3000
-
-# Run frontend and backend together
-CMD ["java", "-jar", "fixify.jar", "&", "npm", "start"]
+#
 ## Додати frontend
-#FROM node:20.13.1 AS frontend
+#FROM node:16-buster AS frontend
 #WORKDIR /app/frontend
-#
-## Очищення кешу npm
 #RUN npm cache clean --force
-#
-## Копіювання package*.json і встановлення залежностей
 #COPY src/frontend/package*.json ./
+#RUN npm install -g @vue/cli
 #RUN npm install
-#
-## Перевірка версій Node.js і npm
-#RUN node -v
-#RUN npm -v
-#
-## Копіювання всіх файлів і запуск збірки
 #COPY src/frontend/. .
 #RUN ls -la  # Перевірка файлів після копіювання
 #RUN npm run build
