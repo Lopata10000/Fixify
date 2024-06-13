@@ -13,7 +13,7 @@ export default {
         userId: 10,
         specialistId: 10,
         projectId: 10,
-        rating: 0
+        rating: 5
       }
     };
   },

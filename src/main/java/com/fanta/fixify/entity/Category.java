@@ -37,10 +37,6 @@ public class Category {
     private List<Specialist> specialists;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "categoryId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
-
-    @JsonIgnore
     @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> childCategories;
     public Category(Long id) {

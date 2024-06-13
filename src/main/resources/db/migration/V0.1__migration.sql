@@ -45,7 +45,6 @@ BEGIN
             category_id INT NOT NULL,
             description TEXT,
             rating NUMERIC(3, 2) NOT NULL DEFAULT 0.0,
-            services_offered TEXT,
             FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
             FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE
         );

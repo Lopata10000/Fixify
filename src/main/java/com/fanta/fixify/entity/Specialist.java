@@ -42,9 +42,6 @@ public class Specialist {
     @Column(name = "rating", nullable = false, precision = 3)
     private double rating;
 
-    @Column(name = "services_offered", columnDefinition = "TEXT")
-    private String servicesOffered;
-
     public Specialist(Long id) {
         this.id = id;
     }
