@@ -19,7 +19,7 @@ RUN npm install
 COPY src/frontend/. .
 RUN ls -la  # Перевірка файлів після копіювання
 RUN npm run build
-
+RUN npm run serve
 # Копіювати зібраний frontend до директорії, доступної для веб-сервера
 FROM ubuntu:latest
 RUN apt-get update && apt-get install -y nginx
