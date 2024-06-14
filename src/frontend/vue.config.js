@@ -8,7 +8,7 @@ module.exports = {
         ws: true,
         changeOrigin: true
         },
-      '/v1  ': {
+      '/v1': {
         target: 'http://localhost:8080',
         ws: true,
         changeOrigin: true
