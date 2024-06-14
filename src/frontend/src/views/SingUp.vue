@@ -5,7 +5,7 @@
         <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
         <p align="center"  class="paragraph large">Хто ти? </p>
         <div class="center">
-        <button class="button " @click="showRegistrationFields('ADMIN')">Замовник</button>
+        <button class="button " @click="showRegistrationFields('USER')">Замовник</button>
         <button class="button w-button" @click="showRegistrationFields('MANAGER')">Фахівець</button>
       </div>
       </div>
@@ -104,7 +104,7 @@ export default {
         this.initPhoneNumberInput();
       });
 
-      if (selectedRole === 'ADMIN') {
+      if (selectedRole === 'USER') {
         this.formHeader = "Реєстрація як замовник";
       } else if (selectedRole === 'MANAGER') {
         this.formHeader = "Реєстрація як фахівець";
@@ -117,7 +117,7 @@ export default {
       formData.append('phoneNumber', this.phoneNumber);
       formData.append('email', this.email);
       formData.append('password', this.password);
-      formData.append('role', "ADMIN");
+      formData.append('role', this.role);
 
       try {
         const response = await fetch('/api/user/new', {

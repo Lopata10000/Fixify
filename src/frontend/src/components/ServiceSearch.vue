@@ -37,8 +37,7 @@ export default {
   },
   methods: {
     searchService() {
-      // Виконайте пошук тут
-      // Встановіть відповідні повідомлення
+      window.location.href ="/new-task"
     },
   },
 };

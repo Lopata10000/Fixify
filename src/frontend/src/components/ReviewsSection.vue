@@ -3,7 +3,7 @@
     <div class="container">
       <div class="section-top">
         <h2 class="heading h3 ">Топ відгуки</h2>
-        <a href="/resources" class="button light mobile-hidden w-button">Побачити всі категорії</a>
+        <a href="/log-in" class="button light mobile-hidden w-button">Додати відгук</a>
       </div>
       <div class="w-dyn-lists w-1">
         <div role="list" class="large-3-grid w-dyn-items ">
@@ -56,13 +56,14 @@ export default({
     }
   },
   methods: {
-
     async fetchEvents() {
       const response = await axios.get('/api/reviews/all');
-      this.reviews = response.data.map(review => {
-        const formattedDate = new Date(review.datePosted).toISOString().slice(0, 19).replace('T', ' ');
-          return { ...review, datePosted: formattedDate };
-      });
+      this.reviews = response.data
+          .map(review => {
+            const formattedDate = new Date(review.datePosted).toISOString().slice(0, 19).replace('T', ' ');
+            return { ...review, datePosted: formattedDate };
+          })
+          .sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted)); // Сортування відгуків за датою у зворотному порядку
       this.loadMore(); // Завантажити першу партію відгуків
     },
     getShortenedText(text) {

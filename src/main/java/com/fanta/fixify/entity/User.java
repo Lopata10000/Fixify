@@ -49,17 +49,17 @@ public class User implements UserDetails {
 
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Specialist> specialists;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Token> tokens;
     @Override

@@ -12,7 +12,7 @@
           </div>
         </div>
         <div v-if="authority === 'ADMIN'" class="nav-cta-button-container">
-          <a href="/admin-panel" class="nav-link cta-button w-nav-link">Адмін</a>
+          <a href="/admin-panel" class="nav-link cta-button w-nav-link">Адмін панель</a>
         </div>
         <div v-if="authority === 'USER' || authority === 'MANAGER'" class="nav-cta-button-container">
           <a href="/dashboard" class="nav-link cta-button w-nav-link">Мої послуги</a>
@@ -48,16 +48,20 @@ export default {
           .then(response => {
             authority.value = response.data;
           })
-          .catch()
-      {
-        authority.value = "NONE"
-      }
+          .catch(error => {
+            if (error.response && error.response.status === 403) {
+              authority.value = "NONE";
+            } else {
+              authority.value = "NONE";
+            }
+          });
     };
 
     const logout = () => {
       axios.get('/v1/logout')
           .then(() => {
             authority.value = 'NONE'; // Оновлюємо authority після виходу
+            window.location.href = "/home";
           })
           .catch(error => {
             console.error(error);

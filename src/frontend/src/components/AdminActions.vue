@@ -314,7 +314,7 @@ export default {
     }
     const showErrorMessage = () => {
       Swal.fire({
-        title: 'Місто з такою назвою вже існує',
+        title: 'Помилка надсилання даних',
         icon: 'error',
         confirmButtonText: 'OK'
       });
@@ -399,18 +399,6 @@ export default {
                     aria-selected="false"
                     @click="onTabClick($event)">
                   Specialists
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                    class="nav-link"
-                    id="tasks"
-                    data-bs-toggle="tab"
-                    type="button"
-                    aria-selected="false"
-                    data-tab="tasks"
-                    @click="onTabClick($event)">
-                  Tasks
                 </button>
               </li>
               <li class="nav-item" role="presentation">
