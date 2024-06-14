@@ -17,11 +17,22 @@ COPY src/frontend/package*.json ./
 RUN npm install -g @vue/cli
 RUN npm install
 COPY src/frontend/. .
+RUN ls -la  # Перевірка файлів після копіювання
 RUN npm run build
 
-# Копіювати зібраний frontend до директорії, доступної для веб-сервера
-FROM ubuntu:latest
-RUN apt-get update && apt-get install -y nginx
-COPY --from=frontend /app/frontend/dist /usr/share/nginx/html
+FROM amazoncorretto:17
+WORKDIR /app
+
+# Копіюємо JAR файл Java-додатку з етапу збирання
+COPY --from=build /app/target/*.jar fixify.jar
+
+# Копіюємо зібрані файли фронтенду Vue.js з етапу збирання фронтенду
+COPY --from=frontend /app/frontend/dist ./frontend-dist
+
+# Встановлюємо потрібні порти
+EXPOSE 8080
 EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+
+# Запускаємо Java-додаток на порту 8080 і Node.js на порту 3000
+ENTRYPOINT ["java", "-jar", "fixify.jar"]
+CMD ["npm", "start", "--prefix", "frontend-dist"]
