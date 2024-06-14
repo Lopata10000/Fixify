@@ -20,7 +20,6 @@ RUN ls -la  # Перевірка файлів після копіювання
 RUN npm run build
 EXPOSE 3000
 CMD ["npm", "run", "serve", "--", "--port", "3000", "--host", "0.0.0.0"]
-# Копіювати зібраний frontend до директорії, доступної для веб-сервера
 #FROM ubuntu:latest
 #RUN apt-get update && apt-get install -y nginx
 #COPY --from=frontend /app/frontend/dist /usr/share/nginx/html
