@@ -1,7 +1,6 @@
 services:
   - type: static_site
     name: my-vue-app
-    repo: https://github.com/yourusername/your-repo
     branch: main
     buildCommand: npm run build --prefix Fixify/src/frontend/
     publishPath: Fixify/src/frontend/dist
