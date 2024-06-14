@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationService service;
 
-    @PostMapping("/users")
+    @PostMapping("/new")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ) {

@@ -67,7 +67,7 @@ export default {
 </script>
 
 <template>
-  <div class="page-wrapper">
+
     <div class="section black-gradient">
       <div class="container">
         <div id="w-node-b49c48ad-b3b4-f319-67e3-9d04be5835dc-7fca7502" class="text-box _550px center-align">
@@ -110,7 +110,7 @@ export default {
         </div>
       </div>
     </div>
-  </div>
+
 </template>
 
 <style scoped>

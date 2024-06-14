@@ -9,20 +9,22 @@
       <nav role="navigation" class="nav-content w-nav-menu">
         <div class="search-banner">
           <div class="search-section">
-            <form action="/search" class="search w-form">
-              <input class="search-bar w-input" maxlength="256" name="query" placeholder="Пошук подій" type="search" id="search" required/>
-              <input type="submit" class="hidden w-button" value="Search"/>
-            </form>
           </div>
         </div>
-        <div class="nav-menu">
-          <a href="/resources" class="nav-link w-nav-link">Всі події</a>
+        <div v-if="authority === 'ADMIN'" class="nav-cta-button-container">
+          <a href="/admin-panel" class="nav-link cta-button w-nav-link">Адмін</a>
         </div>
-        <div class="nav-link">
+        <div v-if="authority === 'USER' || authority === 'MANAGER'" class="nav-cta-button-container">
+          <a href="/dashboard" class="nav-link cta-button w-nav-link">Мої послуги</a>
+        </div>
+        <div v-if=" authority === 'NONE'" class="nav-link">
           <a href="/log-in" class="nav-link cta-button w-nav-link">Увійти</a>
         </div>
-        <div class="nav-cta-button-container">
+        <div v-if=" authority === 'NONE'" class="nav-cta-button-container">
           <a href="/sign-up" class="nav-link cta-button w-nav-link">Реєстрація</a>
+        </div>
+        <div v-if="authority === 'USER' || authority === 'MANAGER' || authority ==='ADMIN'" class="nav-link">
+          <a @click="logout" class="nav-link cta-button w-nav-link">Вийти</a>
         </div>
       </nav>
       <div class="menu-button w-nav-button">
@@ -33,8 +35,44 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import axios from "../axios";
+
 export default {
   name: 'NavBar',
+  setup: function () {
+    const authority = ref(null);
+
+    const getAuthority = () => {
+      axios.get('/v1/get-authority')
+          .then(response => {
+            authority.value = response.data;
+          })
+          .catch()
+      {
+        authority.value = "NONE"
+      }
+    };
+
+    const logout = () => {
+      axios.get('/v1/logout')
+          .then(() => {
+            authority.value = 'NONE'; // Оновлюємо authority після виходу
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    };
+
+    onMounted(() => {
+      getAuthority();
+    });
+
+    return {
+      authority,
+      logout,
+    };
+  },
 };
 </script>
 

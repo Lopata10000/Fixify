@@ -58,8 +58,10 @@ export default {
   methods: {
     async submitForm() {
       try {
-        const formData = new FormData(this.$refs.form);
-        const response = await fetch('/api/authentication', {
+        const formData = new FormData();
+        formData.append("email", this.email)
+        formData.append("password", this.password)
+        const response = await fetch('/api/user/authentication', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

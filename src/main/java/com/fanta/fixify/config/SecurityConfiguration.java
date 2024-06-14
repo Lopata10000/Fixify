@@ -14,8 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.fanta.fixify.entity.Permission.ADMIN_UPDATE;
-import static com.fanta.fixify.entity.Permission.MANAGER_UPDATE;
+import static com.fanta.fixify.entity.Permission.*;
 import static com.fanta.fixify.entity.Role.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -57,18 +56,17 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers( "/api/**").permitAll()
-                                .requestMatchers( "/api/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/authentication").permitAll()
-                                .requestMatchers(HttpMethod.POST, "api/applications/create").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                                .requestMatchers( "/private/new-event.html").hasAnyRole(ADMIN.name(), USER.name())
-                                .requestMatchers( "/api/applications").permitAll()
+                                .requestMatchers( "/api/user/**").permitAll()
+                                .requestMatchers( "/v1/get-authority").permitAll()
+                                .requestMatchers( "/api/users/**").hasAnyRole(ADMIN.name())
+
                 )
 
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl("/logout")
+                        logout.logoutUrl("/v1/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )

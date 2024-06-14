@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <NavBar/>
-    <div class="page-wrapper">
+
       <ReviewForm></ReviewForm>
 
-    </div>
+
     <AppFooter/>
   </div>
 </template>

@@ -1,6 +1,6 @@
 package com.fanta.fixify.config;
 
-
+import com.fanta.fixify.token.TokenMapper;
 import com.fanta.fixify.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
     private final TokenRepository tokenRepository;
+    private final TokenMapper tokenMapper;
 
     @Override
     public void logout(
@@ -28,12 +29,13 @@ public class LogoutService implements LogoutHandler {
             return;
         }
         jwt = authHeader.substring(7);
-        var storedToken = tokenRepository.findByToken(jwt)
-                .orElse(null);
-        if (storedToken != null) {
+        var storedTokenOpt = tokenRepository.findByToken(jwt);
+        if (storedTokenOpt.isPresent()) {
+            var storedToken = storedTokenOpt.get();
             storedToken.setExpired(true);
             storedToken.setRevoked(true);
-            tokenRepository.save(storedToken);
+            tokenRepository.deleteById(storedToken.getId());
+            tokenRepository.save(tokenMapper.toEntity(storedToken));
             SecurityContextHolder.clearContext();
         }
     }

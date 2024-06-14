@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -47,18 +50,18 @@ public class User implements UserDetails {
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Specialist> specialists;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Token> tokens;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

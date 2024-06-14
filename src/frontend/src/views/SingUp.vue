@@ -117,10 +117,10 @@ export default {
       formData.append('phoneNumber', this.phoneNumber);
       formData.append('email', this.email);
       formData.append('password', this.password);
-      formData.append('role', this.role);
+      formData.append('role', "ADMIN");
 
       try {
-        const response = await fetch('/api/users', {
+        const response = await fetch('/api/user/new', {
           method: 'POST',
           body: JSON.stringify(Object.fromEntries(formData)),
           headers: {

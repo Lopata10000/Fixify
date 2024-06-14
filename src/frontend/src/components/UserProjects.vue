@@ -17,7 +17,16 @@ async function fetchServices(tab) {
     console.error(error)
   }
 }
+function newTask()
+{
+  window.location.href = "/new-task";
 
+}
+function newReview()
+{
+  window.location.href = "/create-review";
+
+}
 function onTabClick(event) {
   activeTab.value = event.target.value
   fetchServices(activeTab.value)
@@ -32,6 +41,19 @@ function onTabClick(event) {
         <div class="terms-card">
           <div class="content-center">
             <ul class="nav nav-tabs position-relative" id="tables" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                    class="nav-link"
+                    id="archive"
+                    data-tab="archive"
+                    value="archive"
+                    data-bs-toggle="tab"
+                    type="button"
+                    aria-selected="false"
+                    @click="newTask">
+                  +
+                </button>
+              </li>
               <li class="nav-item" role="presentation">
                 <button
                     class="nav-link active"
@@ -83,6 +105,9 @@ function onTabClick(event) {
                       <p class="card-text">Опис: {{ service.description }}</p>
                       <p class="card-text">Бюджет: {{ service.budget }}</p>
                       <p class="card-text">Статус: {{ service.status }}</p>
+                      <div class="content-center">
+                      <button @click=newReview v-if="activeTab === 'accepted'" class="button w-button" style="width: 200px">Відгук</button>
+                      </div>
                     </div>
                   </div>
                   <p v-else>Немає послуг</p>
