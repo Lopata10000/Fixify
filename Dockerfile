@@ -1,26 +1,28 @@
-FROM amazoncorretto:17
+FROM maven:3.9.6-amazoncorretto-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn package
 
-# Копіюємо JAR файл Java-додатку з етапу збирання
+FROM amazoncorretto:17
 COPY --from=build /app/target/*.jar fixify.jar
-
-# Копіюємо зібрані файли фронтенду Vue.js з етапу збирання фронтенду
-COPY --from=frontend /app/frontend/dist ./frontend-dist
-
-# Встановлюємо needed порти
 EXPOSE 8080
-EXPOSE 3000
-
-# Створюємо файл конфігурації supervisord
-RUN echo "[supervisord]\n\
-nodaemon=true\n\
-[program:java]\n\
-command=java -jar fixify.jar\n\
-[program:node]\n\
-command=npm run serve" > /etc/supervisor/supervisord.conf
-
-# Встановлюємо supervisord
-RUN apt-get update && apt-get install -y supervisor
-
-# Запускаємо supervisord
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["java", "-jar", "fixify.jar"]
+#
+## Додати frontend
+#FROM node:16-buster AS frontend
+#WORKDIR /app/frontend
+#RUN npm cache clean --force
+#COPY src/frontend/package*.json ./
+#RUN npm install -g @vue/cli
+#RUN npm install
+#COPY src/frontend/. .
+#RUN ls -la  # Перевірка файлів після копіювання
+#RUN npm run build
+#
+## Копіювати зібраний frontend до директорії, доступної для веб-сервера
+#FROM ubuntu:latest
+#RUN apt-get update && apt-get install -y nginx
+#COPY --from=frontend /app/frontend/dist /usr/share/nginx/html
+#EXPOSE 3000
+#CMD ["nginx", "-g", "daemon off;"]
