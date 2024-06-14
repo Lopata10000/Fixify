@@ -1,25 +1,3 @@
-FROM maven:3.9.6-amazoncorretto-17 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn package
-
-FROM amazoncorretto:17
-COPY --from=build /app/target/*.jar fixify.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "fixify.jar"]
-
-# Додати frontend
-FROM node:20.13.1 AS frontend
-WORKDIR /app/frontend
-RUN npm cache clean --force
-COPY src/frontend/package*.json ./
-RUN npm install -g @vue/cli
-RUN npm install
-COPY src/frontend/. .
-RUN ls -la  # Перевірка файлів після копіювання
-RUN npm run build
-
 FROM amazoncorretto:17
 WORKDIR /app
 
@@ -29,10 +7,20 @@ COPY --from=build /app/target/*.jar fixify.jar
 # Копіюємо зібрані файли фронтенду Vue.js з етапу збирання фронтенду
 COPY --from=frontend /app/frontend/dist ./frontend-dist
 
-# Встановлюємо потрібні порти
+# Встановлюємо needed порти
 EXPOSE 8080
 EXPOSE 3000
 
-# Запускаємо Java-додаток на порту 8080 і Node.js на порту 3000
-ENTRYPOINT ["java", "-jar", "fixify.jar"]
-ENTRYPOINT ["npm", "run", "serve"]
+# Створюємо файл конфігурації supervisord
+RUN echo "[supervisord]\n\
+nodaemon=true\n\
+[program:java]\n\
+command=java -jar fixify.jar\n\
+[program:node]\n\
+command=npm run serve" > /etc/supervisor/supervisord.conf
+
+# Встановлюємо supervisord
+RUN apt-get update && apt-get install -y supervisor
+
+# Запускаємо supervisord
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
