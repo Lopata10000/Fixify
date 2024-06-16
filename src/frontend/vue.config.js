@@ -1,5 +1,6 @@
 module.exports = {
   publicPath: '/',
+  outputDir: '../main/resources/static',
   devServer: {
     host: 'localhost',
     port: 3000,

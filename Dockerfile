@@ -1,12 +1,11 @@
-FROM node:latest
-
+FROM maven:3.9.6-amazoncorretto-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn package
 
-COPY ./src/frontend/package.json /app/
-COPY ./src/frontend/ /app/
+FROM amazoncorretto:17
+COPY --from=build /app/target/*.jar fixify.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "fixify.jar"]
 
-RUN npm install
-RUN npm run build
-
-EXPOSE 3000
-CMD ["npm", "run","serve"]
