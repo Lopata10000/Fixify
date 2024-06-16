@@ -10,7 +10,7 @@
 #ENTRYPOINT ["java", "-jar", "fixify.jar"]
 #
 
-FROM node:18.19.1 as build
+FROM node:18.19.1-alpine3.19 as build-stage
 WORKDIR /app
 COPY src/frontend/package.json ./
 RUN npm cache clean --force
