@@ -1,0 +1,95 @@
+<html data-wf-domain="fixify" data-wf-page="6610606a30da13b8a528a13e" data-wf-site="6610606930da13b8a528a088"
+      lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Fixify</title>
+    <link rel="icon" href="/image/logo.png">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.cf64f3824.css"
+          rel="stylesheet" type="text/css"/>
+
+    <!-- Підключаємо Axios з CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="/css/style.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="w-users-userformpagewrap full-page-wrapper">
+    <div class="w-users-usersignupformwrapper admin-form-card">
+        <div id="buttons-wrapper">
+            <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
+            <p align="center" class="paragraph large">Хто ти? </p>
+            <button class="  button w-button " onclick="showRegistrationFields('ADMIN')">Замовник</button>
+            <button class="button w-button " onclick="showRegistrationFields('MANAGER')">Фахівець</button>
+        </div>
+        <form id="user-form" style="display: none;">
+            <img src="/image/logo-long.png" loading="lazy" alt="" width="300"/>
+            <div class="w-users-userformheader form-card-header"><h2 class="heading h3">Реєстрація</h2></div>
+            <input id="fullName" class="text-field w-input" data-name="field" data-wf-user-field="wf-user-field-name"
+                   maxlength="256"
+                   name="fullName" pattern="[A-Za-zА-Яа-яЁёЇїІіЄєҐґ\s']{3,}" placeholder="Ваше повне ім'я" required
+                   title="Будь ласка, введіть тільки літери і більше за 2 символи." type="text">
+            <select id="address" name="address" required =""  data-name="Category 2" class="form-dropdown w-select">
+                <option value="" selected disabled>Оберіть ваше місто</option>
+
+            </select>
+
+            <input id="phoneNumber" class="text-field w-input, text-field" data-wf-user-form-input-type="telephone"
+                   style="width: 300px;"
+                   maxlength="10" name="phoneNumber" data-orig-size="10" required placeholder="Ваш номер телефону"
+                   type="tel"/>
+            <input id="email" autoComplete="email" class="text-field w-input" style="margin-top: 19px"
+                   data-wf-user-form-input-type="email"
+                   maxlength="256" name="email" placeholder="Ваша електронна адреса"
+                   required type="email"/>
+
+            <input
+                    id="wf-sign-up-password" class="text-field-copy w-input" data-wf-user-form-input-type="password"
+                    maxlength="256" minlength="8"
+                    name="password" placeholder="Ваш пароль" required=""
+                    type="password"/>
+
+
+            <label class="w-checkbox checkbox-field">
+                <input id="wf-sign-up-accept-privacy" class="w-checkbox-input check-box" data-name="Checkbox"
+                       data-wf-user-field="wf-user-field-accept-privacy" name="Checkbox" placeholder=""
+                       required type="checkbox"/>
+                <span class="checkbox-label w-form-label" for="wf-sign-up-accept-privacy">Я згоден з політикою конфіденційності</span>
+            </label>
+            <input
+                    class="w-users-userformbutton button w-button" data-wait="Зачекайте..." type="submit"
+                    value="Реєстрація"/>
+            <div class="w-users-userformfooter form-card-footer"><span>Уже маєте аккаунт</span><a
+                    href="/html/log-in.html">Увійти</a></div>
+        </form>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="/scripts/sign-up.js">
+        </script>
+        <script src="/scripts/phone-input.js"></script>
+        <script src="/scripts/choose-role.js"></script>
+        <script src="/scripts/towns.js"></script>
+
+
+        <div class="w-users-usersignupverificationmessage verification-box w-form-verification"
+             data-wf-user-form-verification="true"
+             tabindex="-1">
+            <div class="w-users-userformheader"><img
+                    alt=""
+                    class="icon"
+                    src="https://assets-global.website-files.com/6610606930da13b8a528a088/6610606a30da13b8a528a16d_Email%20Sent%20Icon.svg"/>
+                <h2>Verification Required</h2></div>
+            <p>Account verification required. Please check your email to find your unique verification link.</p></div>
+    </div>
+    <div id="error-message" style="display: none"></div>
+
+</div>
+
+
+</body>
+
+</html>
