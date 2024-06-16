@@ -47,6 +47,7 @@
 
 <script>
 import Swal from 'sweetalert2';
+import router from "@/router/router";
 
 export default {
   data() {
@@ -56,70 +57,75 @@ export default {
     };
   },
   methods: {
+
     async submitForm() {
-      try {
-        const formData = new FormData();
-        formData.append("email", this.email)
-        formData.append("password", this.password)
-        const response = await fetch('/api/user/authentication', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(Object.fromEntries(formData)),
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-          const token = data.refresh_token;
-          localStorage.setItem('refreshToken', token);
-          await Swal.fire({
-            title: 'Успішна авторизація.',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          window.location.href = "/new-task";
-        } else {
-          await Swal.fire({
-            title: 'Невірний логін або пароль',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-          this.showError(data);
+      // Показати вікно завантаження
+      Swal.fire({
+        title: 'Будь ласка зачекайте...',
+        width: 500,
+        allowOutsideClick: false,
+        customClass: {
+          popup: 'custom-popup-class', // додайте ваш CSS-клас тут
+        },
+        didOpen: () => {
+          Swal.showLoading();
+        },
+        didRender: () => {
+          Swal.hideLoading();
         }
-      } catch (error) {
-        console.error('Помилка:', error);
-      }
-    },
-    showError(responseText) {
-      const errorMessage = typeof responseText === 'object' ? responseText.message : responseText;
-      this.$refs.errorMessage.innerText = errorMessage;
-      this.$refs.errorMessage.style.display = 'block';
-      setTimeout(() => {
-        this.$refs.errorMessage.style.display = 'none';
-      }, 5000);
-    },
-  },
-    showError(responseText) {
-      if (typeof responseText === 'string' && responseText.startsWith('{')) {
-        const error = JSON.parse(responseText);
-        const errorMessage = error.message;
-        document.getElementById('error-message').innerText = errorMessage;
-      } else {
-        document.getElementById('error-message').innerText = responseText;
-      }
-      document.getElementById('error-message').style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('error-message').style.display = 'none';
-      }, 5000);
-    },
+      });
+      const formData = new FormData();
+      formData.append("email", this.email)
+      formData.append("password", this.password)
+      const response = await fetch('/api/user/authentication', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      });
+      const data = await response.json();
 
-};
+      if (response.ok) {
+        const token = data.refresh_token;
+        localStorage.setItem('refreshToken', token);
+
+        await Swal.update({
+          title: 'Успішна авторизація.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          didClose: () => {
+            // Після закриття викликається перенаправлення
+            router.push('/dashboard'); // вказуйте ваш новий шлях
+          }
+        })
+
+      } else {
+        await Swal.update({
+          title: 'Невірний логін або пароль',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+
+      }
+    },
+  }
+}
 </script>
 
 <style >
-a {
-  color: black;
-  text-decoration: none;
+
+.custom-popup-class {
+  height: 300px; /* ваша висота */
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto; /* це для центрування по горизонталі */
+  top: 0; /* це для центрування по вертикалі */
+  bottom: 0; /* це для центрування по вертикалі */
 }
+
+
 </style>

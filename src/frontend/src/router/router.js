@@ -12,7 +12,11 @@ const routes = [
     {
         path: '/home',
         name: 'HomePage',
-        component: HomePage
+        component: HomePage,
+        meta: {
+            icon: '/image/logo.png', // іконка для цього маршруту
+            title: 'Головна сторінка' // заголовок (метатекст)
+        }
     }, {
         path: '/sign-up',
         name: 'SignUp',
@@ -44,9 +48,9 @@ const routes = [
     }
 ];
 
-const index = createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes
 });
 
-export default index;
+export default router;

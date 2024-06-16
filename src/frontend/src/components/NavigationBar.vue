@@ -2,7 +2,7 @@
   <div class="nav-bar w-nav">
     <div class="nav-container w-container">
       <div class="logo-div">
-        <a href="/" class="nav-logo w-inline-block w--current">
+        <a href="/home" class="nav-logo w-inline-block w--current">
           <img src="/image/logo-long.png" width="250" height="auto" alt="" class="logo"/>
         </a>
       </div>
@@ -10,6 +10,9 @@
         <div class="search-banner">
           <div class="search-section">
           </div>
+        </div>
+        <div v-if="authority === 'USER' || authority === 'MANAGER' || authority ==='ADMIN'" class="nav-link">
+          <a @click="logout" >Вийти</a>
         </div>
         <div v-if="authority === 'ADMIN'" class="nav-cta-button-container">
           <a href="/admin-panel" class="nav-link cta-button w-nav-link">Адмін панель</a>
@@ -23,9 +26,7 @@
         <div v-if=" authority === 'NONE'" class="nav-cta-button-container">
           <a href="/sign-up" class="nav-link cta-button w-nav-link">Реєстрація</a>
         </div>
-        <div v-if="authority === 'USER' || authority === 'MANAGER' || authority ==='ADMIN'" class="nav-link">
-          <a @click="logout" class="nav-link cta-button w-nav-link">Вийти</a>
-        </div>
+
       </nav>
       <div class="menu-button w-nav-button">
         <img src="/image/logo-long.png" width="24" alt="" class="menu-icon"/>

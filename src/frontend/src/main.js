@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';
+import router from './router/router';
 import './assets/tailwind.css';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css'; // Переміщено вище
 import 'datatables.net';

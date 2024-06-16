@@ -31,14 +31,15 @@ public class RoleBasedEndpoint {
          String authHeader = request.getHeader("Authorization");
          String token =  authHeader.substring(7);;
 
-        String userEmail = jwtService.extractUsername(token);
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+
         var isTokenValid = tokenRepository.findByToken(token)
                 .map(t -> !t.isExpired() && !t.isRevoked())
                 .orElse(false);
         if (!isTokenValid) {
             return "NONE";
         }
+        String userEmail = jwtService.extractUsername(token);
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
         // Вилучення ролі з токена
         String role = userDetails.getAuthorities().stream()

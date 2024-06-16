@@ -44,6 +44,7 @@
 import Swal from 'sweetalert2';
 import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/css/intlTelInput.css';
+import router from "@/router/router";
 
 export default {
   data() {
@@ -111,6 +112,20 @@ export default {
       }
     },
     async submitForm() {
+      Swal.fire({
+        title: 'Будь ласка зачекайте...',
+        width: 500,
+        allowOutsideClick: false,
+        customClass: {
+          popup: 'custom-popup-class', // додайте ваш CSS-клас тут
+        },
+        didOpen: () => {
+          Swal.showLoading();
+        },
+        didRender: () => {
+          Swal.hideLoading();
+        }
+      });
       const formData = new FormData();
       formData.append('fullName', this.fullName);
       formData.append('address', this.address);
@@ -119,7 +134,7 @@ export default {
       formData.append('password', this.password);
       formData.append('role', this.role);
 
-      try {
+
         const response = await fetch('/api/user/new', {
           method: 'POST',
           body: JSON.stringify(Object.fromEntries(formData)),
@@ -127,32 +142,29 @@ export default {
             'Content-Type': 'application/json'
           }
         });
-
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          await Swal.update({
+            title: 'Електронна адреса уже існує',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          })
         }
-
-        const responseData = await response.json();
-        const token = responseData.refresh_token;
-        localStorage.setItem('refreshToken', token);
-        Swal.fire({
-          title: 'Успішна реєстрація.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = "/new-task";
-          }
-        });
-      } catch (error) {
-        await Swal.fire({
-          title: 'Така електронна адреса уже використовується.',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        })
+        else {
+          const responseData = await response.json();
+          const token = responseData.refresh_token;
+          localStorage.setItem('refreshToken', token);
+          Swal.update({
+            title: 'Успішна реєстрація',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            didClose: () => {
+              router.push('/dashboard');
+            }
+          })
+        }
       }
     }
-}
+
 }
 </script>
 
