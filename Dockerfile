@@ -1,11 +1,12 @@
+FROM node:latest
 
-
-FROM node:16 as build-stage
 WORKDIR /app
-COPY src/frontend/package.json ./
-RUN npm install
-COPY src/frontend .
-RUN npm run build
-EXPOSE 3000
-CMD["run", "npm", "serve"]
 
+COPY ./src/frontend/package.json /app/
+COPY ./src/frontend/ /app/
+
+RUN npm install
+RUN npm run build
+
+EXPOSE 3000
+CMD ["npm", "start"]
