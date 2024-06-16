@@ -1,0 +1,36 @@
+<html data-wf-domain="fixify" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Fixify</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="icon" href="../image/logo.png">
+    <link href="https://assets-global.website-files.com/6610606930da13b8a528a088/css/priborzhavsky-lyceum-news.webflow.cf64f3824.css"
+          rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+<div class="w-users-userformpagewrap full-page-wrapper">
+    <div class="w-users-userloginformwrapper admin-form-card">
+        <img src="../image/logo-long.png" loading="lazy"  alt="" width="300"/>
+        <form id="user-form">
+            <div class="w-users-userformheader form-card-header"><h2 class="heading h3">Вхід </h2>
+                <p class="paragraph small">Заповніть свої дані нижче</p></div>
+            <input maxlength="256" placeholder="Ваша електронна адреса" name="email" id="email"
+                   class="text-field w-input"
+                   type="email" autoComplete="email" required="" data-wf-user-form-input-type="email"/><input
+                maxlength="256" placeholder="Ваш пароль" name="password" id="password"
+                class="text-field w-input" type="password" required="" data-wf-user-form-input-type="password"/><input
+                type="submit" data-wait="Зачекайте..." class="w-users-userformbutton button w-button" value="Увійти"/>
+            <div class="w-users-userformfooter form-card-footer"><span>Немає акаунту?</span><a
+                    href="/html/sign-up.html">Зареєструватись</a>
+            </div>
+        </form>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script type="module" src="/scripts/log-in.js"></script>
+    </div>
+    <div id="error-message" style="display: none"></div>
+    <a href="/html/reset-password.html" class="below-card-link">Забув пароль?</a></div>
+
+</body>
+</html>
