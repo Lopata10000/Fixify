@@ -1,13 +1,25 @@
-FROM maven:3.9.6-amazoncorretto-17 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn package
+#FROM maven:3.9.6-amazoncorretto-17 AS build
+#WORKDIR /app
+#COPY pom.xml .
+#COPY src ./src
+#RUN mvn package
+#
+#FROM amazoncorretto:17
+#COPY --from=build /app/target/*.jar fixify.jar
+#EXPOSE 8080
+#ENTRYPOINT ["java", "-jar", "fixify.jar"]
+#
 
-FROM amazoncorretto:17
-COPY --from=build /app/target/*.jar fixify.jar
+FROM node:18.19.1 as build
+WORKDIR /app
+COPY src/frontend/package.json ./
+RUN npm cache clean --force
+RUN npm install
+
+COPY src/frontend .
+RUN npm run build
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "fixify.jar"]
+CMD ["npm", "run", "serve"]
 
 #FROM node:16-buster AS frontend
 #WORKDIR /app/frontend
