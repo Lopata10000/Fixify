@@ -18,7 +18,7 @@ RUN npm install
 
 COPY src/frontend .
 RUN npm run build
-EXPOSE 8080
+EXPOSE 3000
 CMD ["npm", "run", "serve"]
 
 #FROM node:16-buster AS frontend
