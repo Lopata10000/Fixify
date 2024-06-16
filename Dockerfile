@@ -10,17 +10,19 @@
 #ENTRYPOINT ["java", "-jar", "fixify.jar"]
 #
 
-FROM node:18.19.1-alpine3.19 as build-stage
+FROM node:18.19.1 as build-stage
 WORKDIR /app
 COPY src/frontend/package.json ./
-RUN npm cache clean --force
 RUN npm install
-
 COPY src/frontend .
 RUN npm run build
-EXPOSE 3000
-CMD ["npm", "run", "serve"]
 
+
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 #FROM node:16-buster AS frontend
 #WORKDIR /app/frontend
 #RUN npm cache clean --force
