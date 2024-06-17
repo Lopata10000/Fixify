@@ -65,7 +65,18 @@ BEGIN
     END IF;
 END
 $$;
-
+INSERT INTO projects (title, description, user_id, specialist_id, category_id, town_id, address, budget, status)
+VALUES
+    ('Project 1', 'Description for project 1', 117, 100, 1, 1, '123 Main St', 1000.00, 'В роботі'),
+    ('Project 2', 'Description for project 2', 117, 100, 1, 1, '124 Main St', 1500.00, 'Очікує'),
+    ('Project 3', 'Description for project 3', 117, 100, 1, 1, '125 Main St', 2000.00, 'Архів'),
+    ('Project 4', 'Description for project 4', 117, 100, 1, 1, '126 Main St', 2500.00, 'В роботі'),
+    ('Project 5', 'Description for project 5', 117, 100, 1, 1, '127 Main St', 3000.00, 'Очікує'),
+    ('Project 6', 'Description for project 6', 117, 100, 1, 1, '128 Main St', 3500.00, 'Архів'),
+    ('Project 7', 'Description for project 7', 117, 100, 1, 1, '129 Main St', 4000.00, 'В роботі'),
+    ('Project 8', 'Description for project 8', 117, 100, 1, 1, '130 Main St', 4500.00, 'Очікує'),
+    ('Project 9', 'Description for project 9', 117, 100, 1, 1, '131 Main St', 5000.00, 'Архів'),
+    ('Project 10', 'Description for project 10', 117, 100, 1, 1, '132 Main St', 5500.00, 'В роботі');
 DO
 $$
 BEGIN
