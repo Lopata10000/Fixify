@@ -46,7 +46,7 @@ export default {
                 confirmButtonText: 'OK',
               }).then((result) => {
                 if (result.isConfirmed) {
-                  window.location.href = "/dash-board";
+                  window.location.href = "/dashboard";
                 }
               });
             } else {
