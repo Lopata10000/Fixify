@@ -9,7 +9,9 @@
         <div class="email-form center-align w-form">
           <form @submit.prevent="searchService" id="wf-form-Subscribe-Form" name="wf-form-Subscribe-Form" class="email-form">
             <div class="email-subscribe">
-              <input class="text-field"  v-model="query" placeholder="Приклад: ремонт холодильника"  required/>
+
+              <input             type="text"
+                                  class="text-field w-input"   placeholder="Приклад: ремонт холодильника"  required/>
               <input type="submit" class="button w-button dark" value="Пошук"/>
             </div>
           </form>
@@ -45,6 +47,9 @@ export default {
 .text-field{
   margin-top: 0px;
   width: 270px;
+}
+.text-field.w-input {
+  color: black;
 }
 
 </style>

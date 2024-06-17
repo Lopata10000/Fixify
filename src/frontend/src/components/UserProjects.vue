@@ -120,7 +120,7 @@ function onTabClick(event) {
                       <p class="card-text">Бюджет: {{ service.budget }}</p>
                       <p class="card-text">Статус: {{ service.status }}</p>
                       <div class="content-center">
-                      <button @click=newReview v-if="activeTab === 'accepted'" class="button w-button" style="width: 200px">Відгук</button>
+                      <button @click=newReview  class="button w-button" style="width: 200px">Відгук</button>
                       </div>
                     </div>
                   </div>

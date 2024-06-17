@@ -17,7 +17,7 @@ export default {
         title: '',
         description: '',
         town_id: '',
-        user_id: '',
+        user_id: '122',
         category_id: '',
         address: '',
         date: '',
@@ -31,7 +31,21 @@ export default {
     this.fetchCategories();
     this.getUserId();
   },
+
   methods: {
+    async  getUserId() {
+      axios.get('/v1/get-authority/id')
+          .then(response => {
+            this.formData.user_id = response.data;
+          })
+          .catch(error => {
+            if (error.response && error.response.status === 403) {
+              this.showError();
+            } else {
+              this.showError();
+            }
+          });
+    },
     async fetchTowns() {
       try {
         const response = await fetch('/api/towns/all');
@@ -71,7 +85,7 @@ export default {
         date: new Date(),
         budget: this.formData.budget,
         categoryId: this.formData.category_id,
-        userId: this.formData.user_id,
+        userId: 122,
       };
       await axios.post('/api/projects', this.formData)
           .then(response => {
