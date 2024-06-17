@@ -47,7 +47,6 @@
 
 <script>
 import Swal from 'sweetalert2';
-import router from "@/router/router";
 
 export default {
   data() {
@@ -96,7 +95,7 @@ export default {
           confirmButtonText: 'OK',
           didClose: () => {
             // Після закриття викликається перенаправлення
-            router.push('/dashboard'); // вказуйте ваш новий шлях
+            window.location.href = "/dashboard" // вказуйте ваш новий шлях
           }
         })
 

@@ -44,7 +44,6 @@
 import Swal from 'sweetalert2';
 import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/css/intlTelInput.css';
-import router from "@/router/router";
 
 export default {
   data() {
@@ -144,7 +143,7 @@ export default {
         });
         if (!response.ok) {
           await Swal.update({
-            title: 'Електронна адреса уже існує',
+            title: 'Електронна адреса існує',
             icon: 'error',
             confirmButtonText: 'OK'
           })
@@ -158,7 +157,7 @@ export default {
             icon: 'success',
             confirmButtonText: 'OK',
             didClose: () => {
-              router.push('/dashboard');
+              window.location.href = "/dashboard" // вказуйте ваш новий шлях
             }
           })
         }

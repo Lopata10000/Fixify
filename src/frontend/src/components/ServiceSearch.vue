@@ -13,12 +13,6 @@
               <input type="submit" class="button w-button dark" value="Пошук"/>
             </div>
           </form>
-          <div v-if="successMessage" class="form-success-2 dark w-form-done">
-            <div>{{ successMessage }}</div>
-          </div>
-          <div v-if="errorMessage" class="w-form-fail">
-            <div>{{ errorMessage }}</div>
-          </div>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "IL343dkkcMTx7URNfBd9MBaRB+eYHSN0uBG3FKMeCVqnk2lhEIGxa0CVm5TycFc8";
-    @Value("86400000")
+    @Value("864000000")
     private long jwtExpiration;
     @Value("604800000")
     private long refreshExpiration;
@@ -72,7 +72,7 @@ public class JwtService {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

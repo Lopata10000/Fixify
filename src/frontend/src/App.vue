@@ -6,20 +6,6 @@
 
 
 <script>
-export default {
-  mounted() {
-    // Оновлюємо заголовок сторінки після завантаження компонента
-    document.title = "Fixify";
-
-    // Оновлюємо іконку сайту (favicon)
-    // Оновлюємо іконку сайту (favicon)
-    // Оновлюємо іконку сайту (favicon)
-    const favicon = document.createElement('link');
-    favicon.rel = 'icon';
-    favicon.href = './assets/logo.png';
-    document.head.appendChild(favicon);
-  }
-  }
 </script>
 
 <style scoped>

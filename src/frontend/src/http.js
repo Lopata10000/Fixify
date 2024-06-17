@@ -28,12 +28,25 @@ axiosInstance.interceptors.response.use(
     },
     error => {
         // Обробка помилок відповіді
-        if (error.response.status === 401) {
+        if (error.response.status === 403) {
             // Наприклад, перенаправлення на сторінку логіну
-            window.location = '/login';
+            window.location = '/access-denied';
         }
         return Promise.reject(error);
     }
 );
-
+// Перехоплювач відповідей
+axiosInstance.interceptors.response.use(
+    response => {
+        // Перевіряємо відповідь на значення "NONE"
+        if (response === "NONE") {
+            // Видаляємо токен з локального сховища
+            localStorage.removeItem('token');
+        }
+        return response;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
 export default axiosInstance;

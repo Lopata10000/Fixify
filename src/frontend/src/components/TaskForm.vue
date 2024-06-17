@@ -12,10 +12,13 @@ export default {
   data() {
     return {
       towns: [],
+      categories: [],
       formData: {
         title: '',
         description: '',
         town_id: '',
+        user_id: '',
+        category_id: '',
         address: '',
         date: '',
         budget: '',
@@ -25,6 +28,8 @@ export default {
   },
   mounted() {
     this.fetchTowns();
+    this.fetchCategories();
+    this.getUserId();
   },
   methods: {
     async fetchTowns() {
@@ -41,6 +46,22 @@ export default {
         console.error('Error fetching towns:', error);
       }
     },
+    async fetchCategories() {
+      try {
+        const response = await fetch('/api/categories/all');
+        const categoriesData = await response.json();
+        this.categories = categoriesData;
+      } catch (error) {
+        await this.showError();
+      }
+    },
+    async showError() {
+      Swal.fire({
+        title: 'Помилка',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    },
     async submitForm() {
       this.formData = {
         title: this.formData.title,
@@ -49,8 +70,8 @@ export default {
         address: this.formData.address,
         date: new Date(),
         budget: this.formData.budget,
-        categoryId: 1,
-        userId: 10,
+        categoryId: this.formData.category_id,
+        userId: this.formData.user_id,
       };
       await axios.post('/api/projects', this.formData)
           .then(response => {
@@ -104,6 +125,14 @@ export default {
                           class="form-dropdown w-select" required="">
                     <option value="" selected disabled>Оберіть ваше місто</option>
                     <option v-for="town in towns" :key="town.id" :value="town.id">{{ town.town_name }}</option>
+                  </select>
+                  <label for="First-Name-2">Категорія</label>
+                  <select id="category" v-model="formData.category_id" name="category" data-name="category"
+                          class="form-dropdown w-select" required="">
+                    <option value="" selected disabled>Оберіть категорію</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                      {{ category.categoryName }}
+                    </option>
                   </select>
                   <label for="First-Name-2">Адреса</label></div>
                 <input class="text-field w-input" minlength="5" name="address" v-model="formData.address"

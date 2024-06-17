@@ -27,7 +27,6 @@ public class SecurityConfiguration {
 
 
     private static final String[] WHITE_LIST_URL = {"/",
-            "/new-task",
             "/home",
             "/sign-up",
             "/log-in",
@@ -36,10 +35,11 @@ public class SecurityConfiguration {
             "/api/reviews/all",
             "/api/projects/all",
             "/api/towns/all",
+            "/api/users/all",
             "/api/categories/all",
-            "/api/specialistsНу і впринципі вдалось 1/all",
+            "/api/specialists/all",
             "/api/user/**",
-            "/v1/get-authority",
+            "/v1/get-authority/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -53,42 +53,38 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers( "/api/users/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers( "/dashboard").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers( "/create-review").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers( "/new-task").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
+                                .requestMatchers( "/**").permitAll()
 
+                                .requestMatchers(HttpMethod.GET, "/api/projects/**").hasAnyAuthority(ADMIN.name(), USER.name(), MANAGER.name())
+                                .requestMatchers(HttpMethod.POST, "/api/projects/**").hasAnyAuthority(ADMIN.name(), USER.name(), MANAGER.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/projects/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/projects/**").hasAnyAuthority(ADMIN.name())
 
-                                .requestMatchers(HttpMethod.GET, "/api/projects/**").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers(HttpMethod.POST, "/api/projects/**").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/projects/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/projects/**").hasAnyRole(ADMIN.name())
-
-                                .requestMatchers("/api/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers("/api/**").hasAnyAuthority(ADMIN.name())
 
                                 .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/reviews/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasAnyAuthority(ADMIN.name(), USER.name(), MANAGER.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/reviews/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasAnyAuthority(ADMIN.name())
 
                                 .requestMatchers(HttpMethod.GET, "/api/towns/all").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/towns/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/towns/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/towns/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers(HttpMethod.POST, "/api/towns/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/towns/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/towns/**").hasAnyAuthority(ADMIN.name())
 
                                 .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/categories/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers(HttpMethod.POST, "/api/categories/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasAnyAuthority(ADMIN.name())
 
                                 .requestMatchers(HttpMethod.GET, "/api/specialists/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/specialists/**").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/specialists/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/specialists/**").hasAnyRole(ADMIN.name())
+                                .requestMatchers(HttpMethod.POST, "/api/specialists/**").hasAnyAuthority(ADMIN.name(), USER.name(), MANAGER.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/specialists/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/specialists/**").hasAnyAuthority(ADMIN.name())
 
-                                .requestMatchers( "/api/review/**").hasAnyRole(ADMIN.name(), USER.name(), MANAGER.name())
-                                .requestMatchers( "/api/users/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers( "/admin-panel").hasAnyRole(ADMIN.name())
+                                .requestMatchers( "/api/review/**").hasAnyAuthority(ADMIN.name(), USER.name(), MANAGER.name())
+                                .requestMatchers( "/api/users/**").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers( "/admin-panel").hasAnyAuthority(ADMIN.name())
 
                 )
 

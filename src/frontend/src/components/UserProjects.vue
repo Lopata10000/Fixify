@@ -4,19 +4,33 @@ import axios from 'axios'
 
 const activeTab = ref('accepted')
 const services = ref([])
-
+let userId ="";
 onMounted(async () => {
   await fetchServices(activeTab.value)
+  await getUserId()
 })
-
+async function getUserId() {
+  axios.get('/v1/get-authority/id')
+      .then(response => {
+        userId = response.data;
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 403) {
+          this.showError();
+        } else {
+          this.showError();
+        }
+      });
+}
 async function fetchServices(tab) {
   try {
-    const response = await axios.get(`/api/projects/user/2/${tab}`)
+    const response = await axios.get(`/api/projects/user/${userId}/${tab}`)
     services.value = response.data
   } catch (error) {
     console.error(error)
   }
 }
+
 function newTask()
 {
   window.location.href = "/new-task";
